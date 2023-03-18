@@ -6,7 +6,7 @@ file:
     local: file://${user.home}/IdeaProjects
     GitHub: https://github.com/${git.username}
 git:
-  uri: ${file.location.GitHub}/${git.repo}
+  uri: ${file.location.local}/${git.repo}
   repo: config-manager
   username: Maxence2997
   accessToken: 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

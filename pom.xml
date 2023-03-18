@@ -21,6 +21,7 @@
         <maven.complier.source>17</maven.complier.source>
         <maven.complier.target>17</maven.complier.target>
         <lombok.version>1.18.26</lombok.version>
+        <webflux.version>3.0.4</webflux.version>
     </properties>
 
     <modules>
