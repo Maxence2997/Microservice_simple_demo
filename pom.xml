@@ -22,20 +22,22 @@
         <maven.complier.target>17</maven.complier.target>
         <lombok.version>1.18.26</lombok.version>
         <webflux.version>3.0.4</webflux.version>
+        <shared-object.version>1.0-SNAPSHOT</shared-object.version>
     </properties>
 
     <modules>
-        <!--        <module>config-client</module>-->
-        <!--        <module>api-gateway</module>-->
-        <!--        <module>UserService</module>-->
-        <!--        <module>shared-objects</module>-->
-
         <module>Config-Server</module>
         <module>Discovery-Server</module>
-        <module>UserService</module>
+        <module>User-Service</module>
+        <module>Record-Service</module>
     </modules>
 
     <dependencies>
+        <dependency>
+            <groupId>idv.laborLab</groupId>
+            <artifactId>Shared-Objects</artifactId>
+            <version>${shared-object.version}</version>
+        </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-actuator</artifactId>
@@ -49,16 +51,6 @@
             <artifactId>lombok</artifactId>
             <version>${lombok.version}</version>
         </dependency>
-        <!--        <dependency>-->
-        <!--            <groupId>org.springframework.boot</groupId>-->
-        <!--            <artifactId>spring-boot-starter-test</artifactId>-->
-        <!--            <scope>test</scope>-->
-        <!--        </dependency>-->
-        <!--        <dependency>-->
-        <!--            <groupId>com.mysql</groupId>-->
-        <!--            <artifactId>mysql-connector-j</artifactId>-->
-        <!--            <scope>runtime</scope>-->
-        <!--        </dependency>-->
         <dependency>
             <groupId>org.testcontainers</groupId>
             <artifactId>junit-jupiter</artifactId>
