@@ -30,6 +30,7 @@
         <module>Discovery-Server</module>
         <module>User-Service</module>
         <module>Record-Service</module>
+        <module>Config-Client</module>
     </modules>
 
     <dependencies>

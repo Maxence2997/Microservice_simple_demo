@@ -1,4 +1,4 @@
-package idv.laborLab.discoveryServer.maxence.microservices.namingserver;
+package discoveryServer.idv.laborLab.discoveryServer;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
