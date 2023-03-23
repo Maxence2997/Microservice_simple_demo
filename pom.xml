@@ -22,7 +22,7 @@
         <maven.complier.target>17</maven.complier.target>
         <lombok.version>1.18.26</lombok.version>
         <webflux.version>3.0.4</webflux.version>
-        <shared-object.version>1.0-SNAPSHOT</shared-object.version>
+        <shared-library.version>1.0-SNAPSHOT</shared-library.version>
     </properties>
 
     <modules>
@@ -36,8 +36,8 @@
     <dependencies>
         <dependency>
             <groupId>idv.laborLab</groupId>
-            <artifactId>Shared-Objects</artifactId>
-            <version>${shared-object.version}</version>
+            <artifactId>Shared-Library</artifactId>
+            <version>${shared-library.version}</version>
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
