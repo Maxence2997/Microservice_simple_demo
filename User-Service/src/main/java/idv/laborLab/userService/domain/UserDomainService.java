@@ -1,8 +1,8 @@
-package idv.laborLab.userService.business;
+package idv.laborLab.userService.domain;
 
 import idv.laborLab.userService.dto.*;
 
-public interface UserBusinessService {
+public interface UserDomainService {
 
     long registerUser(UserRegistrationDTO user);
 

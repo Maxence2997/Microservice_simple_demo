@@ -4,13 +4,14 @@ server:
 spring:
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://localhost:3306/${spring.application.name}?createDatabaseIfNotExist=true
+    url: jdbc:mysql://${spring.datasource.host}:3306/${spring.application.name}?createDatabaseIfNotExist=true
+    host: localhost
     username: root
     password: root
   jpa:
     show-sql: true
     hibernate:
-      ddl-auto: create-drop
+      ddl-auto: create-drop # only for testing
     database-platform: org.hibernate.dialect.MySQLDialect
     generate-ddl: true
 
