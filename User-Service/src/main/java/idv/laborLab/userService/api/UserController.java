@@ -5,10 +5,7 @@ import idv.laborLab.userService.dto.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RequiredArgsConstructor
 @RestController
@@ -19,35 +16,35 @@ public class UserController {
 
     // register user
     @PostMapping("/register")
-    public ResponseEntity<Long> registerUser(UserRegistrationDTO userRegistrationDTO) {
+    public ResponseEntity<Long> registerUser(@RequestBody UserRegistrationDTO userRegistrationDTO) {
 
         return ResponseEntity.status(HttpStatus.CREATED).body(userBusinessService.registerUser(userRegistrationDTO));
     }
 
     // get specific user
     @PostMapping("/search")
-    public ResponseEntity<UserDTO> searchUser(SearchUserRequestDTO searchUserRequestDTO) {
+    public ResponseEntity<UserDTO> searchUser(@RequestBody SearchUserRequestDTO searchUserRequestDTO) {
 
         return ResponseEntity.status(HttpStatus.OK).body(userBusinessService.searchUser(searchUserRequestDTO));
     }
 
     // update user info
     @PutMapping("/update")
-    public ResponseEntity<UserDTO> updateUser(UpdateUserInfoDTO updateUserInfoDTO) {
+    public ResponseEntity<UserDTO> updateUser(@RequestBody UpdateUserInfoDTO updateUserInfoDTO) {
 
         return ResponseEntity.status(HttpStatus.ACCEPTED).body(userBusinessService.updateUser(updateUserInfoDTO));
     }
 
     // validate user
     @PostMapping("/validate")
-    public ResponseEntity<Boolean> updateUser(SearchUserRequestDTO searchUserRequestDTO) {
+    public ResponseEntity<Boolean> updateUser(@RequestBody SearchUserRequestDTO searchUserRequestDTO) {
 
         return ResponseEntity.status(HttpStatus.OK).body(userBusinessService.validateUser(searchUserRequestDTO));
     }
 
     // reset password - temporary
     @PostMapping("/reset-pwd")
-    public ResponseEntity resetPassword(ResetUserPasswordDTO resetUserPasswordDTO) {
+    public ResponseEntity resetPassword(@RequestBody ResetUserPasswordDTO resetUserPasswordDTO) {
 
         userBusinessService.resetPassword(resetUserPasswordDTO);
         return ResponseEntity.status(HttpStatus.OK).build();

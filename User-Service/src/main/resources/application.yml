@@ -4,7 +4,8 @@ server:
 spring:
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://${spring.datasource.host}:3306/${spring.application.name}?createDatabaseIfNotExist=true
+    url: jdbc:mysql://${spring.datasource.host}:${spring.datasource.port}/${spring.application.name}?createDatabaseIfNotExist=true
+    port: 3307
     host: localhost
     username: root
     password: root

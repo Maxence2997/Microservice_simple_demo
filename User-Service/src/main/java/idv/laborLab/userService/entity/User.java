@@ -2,6 +2,7 @@ package idv.laborLab.userService.entity;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -10,14 +11,15 @@ import java.time.LocalDate;
 @Entity
 @Table(name = "user_table",
        indexes = {
-               @Index(name = "full_name", columnList = "first_name, last_name"),
-               @Index(name = "user_name", columnList = "user_name", unique = true),
+               @Index(name = "full_name", columnList = "firstName, lastName"),
+               @Index(name = "user_name", columnList = "userName", unique = true),
                @Index(name = "email", columnList = "email", unique = true),
-               @Index(name = "phone_number", columnList = "phone_number", unique = true)
+               @Index(name = "phone_number", columnList = "phoneNumber", unique = true)
        })
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
 public class User {
 
     @Id
