@@ -6,14 +6,18 @@ public interface UserBusinessService {
 
     long registerUser(UserRegistrationDTO user);
 
-    UserDTO searchUser(SearchUserRequestDTO searchUserRequestDTO);
+    UserDTO searchUser(UserGeneralRequestDTO userGeneralRequestDTO);
 
     UserDTO updateUser(UpdateUserInfoDTO updateUserInfoDTO);
 
-    boolean validateUser(SearchUserRequestDTO searchUserRequestDTO);
+    boolean validateUser(UserGeneralRequestDTO userGeneralRequestDTO);
 
-    void removeUser(SearchUserRequestDTO searchUserRequestDTO);
+    boolean logInUser(UserLogInDTO userLogInDTO);
+
+    void removeUser(UserGeneralRequestDTO userGeneralRequestDTO);
 
     // temporary
     void resetPassword(ResetUserPasswordDTO resetUserPasswordDTO);
+
+    boolean checkUserExistence(UserGeneralRequestDTO userGeneralRequestDTO);
 }

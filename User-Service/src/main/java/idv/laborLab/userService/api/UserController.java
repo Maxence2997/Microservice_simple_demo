@@ -23,9 +23,9 @@ public class UserController {
 
     // get specific user
     @PostMapping("/search")
-    public ResponseEntity<UserDTO> searchUser(@RequestBody SearchUserRequestDTO searchUserRequestDTO) {
+    public ResponseEntity<UserDTO> searchUser(@RequestBody UserGeneralRequestDTO userGeneralRequestDTO) {
 
-        return ResponseEntity.status(HttpStatus.OK).body(userBusinessService.searchUser(searchUserRequestDTO));
+        return ResponseEntity.status(HttpStatus.OK).body(userBusinessService.searchUser(userGeneralRequestDTO));
     }
 
     // update user info
@@ -35,18 +35,30 @@ public class UserController {
         return ResponseEntity.status(HttpStatus.ACCEPTED).body(userBusinessService.updateUser(updateUserInfoDTO));
     }
 
-    // validate user
-    @PostMapping("/validate")
-    public ResponseEntity<Boolean> updateUser(@RequestBody SearchUserRequestDTO searchUserRequestDTO) {
+    //    // validate user
+    //    @PostMapping("/validate")
+    //    public ResponseEntity<Boolean> validateUser(@RequestBody SearchUserRequestDTO searchUserRequestDTO) {
+    //
+    //        return ResponseEntity.status(HttpStatus.OK).body(userBusinessService.validateUser(searchUserRequestDTO));
+    //    }
 
-        return ResponseEntity.status(HttpStatus.OK).body(userBusinessService.validateUser(searchUserRequestDTO));
+    @PostMapping("/log-in")
+    public ResponseEntity<Boolean> logIn(@RequestBody UserLogInDTO userLogInDTO) {
+
+        return ResponseEntity.status(HttpStatus.OK).body(userBusinessService.logInUser(userLogInDTO));
     }
 
     // reset password - temporary
     @PostMapping("/reset-pwd")
-    public ResponseEntity resetPassword(@RequestBody ResetUserPasswordDTO resetUserPasswordDTO) {
+    public ResponseEntity<?> resetPassword(@RequestBody ResetUserPasswordDTO resetUserPasswordDTO) {
 
         userBusinessService.resetPassword(resetUserPasswordDTO);
         return ResponseEntity.status(HttpStatus.OK).build();
+    }
+
+    @PostMapping("/check")
+    public ResponseEntity<Boolean> checkUserExistence(@RequestBody UserGeneralRequestDTO userGeneralRequestDTO) {
+
+        return ResponseEntity.status(HttpStatus.OK).body(userBusinessService.checkUserExistence(userGeneralRequestDTO));
     }
 }

@@ -20,6 +20,6 @@ public class UserSecurityInfo {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
-    private String password;
+    private byte[] passwordByte;
     private long userId;    // one to one with user entity
 }

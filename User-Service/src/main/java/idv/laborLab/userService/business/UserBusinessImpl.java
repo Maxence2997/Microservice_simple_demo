@@ -2,6 +2,7 @@ package idv.laborLab.userService.business;
 
 import idv.laborLab.userService.domain.UserDomainService;
 import idv.laborLab.userService.dto.*;
+import idv.laborLab.userService.entity.User;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -20,30 +21,49 @@ public class UserBusinessImpl implements UserBusinessService {
     }
 
     @Override
-    public UserDTO searchUser(SearchUserRequestDTO searchUserRequestDTO) {
+    public UserDTO searchUser(UserGeneralRequestDTO userGeneralRequestDTO) {
 
-        return null;
+        return userDomainService.searchUser(userGeneralRequestDTO.userIndex(), userGeneralRequestDTO.indexString());
     }
 
     @Override
     public UserDTO updateUser(UpdateUserInfoDTO updateUserInfoDTO) {
+        //do some business check later
 
-        return null;
+        User user = userDomainService.searchUserEntity(updateUserInfoDTO.userIndex(), updateUserInfoDTO.indexString());
+        user.setEmail(updateUserInfoDTO.email());
+        user.setPhoneNumber(updateUserInfoDTO.phoneNumber());
+        return userDomainService.updateUser(user);
     }
 
     @Override
-    public boolean validateUser(SearchUserRequestDTO searchUserRequestDTO) {
+    public boolean validateUser(UserGeneralRequestDTO userGeneralRequestDTO) {
 
         return false;
     }
 
     @Override
-    public void removeUser(SearchUserRequestDTO searchUserRequestDTO) {
+    public boolean logInUser(UserLogInDTO userLogInDTO) {
 
+        UserDTO user = userDomainService.searchUser(userLogInDTO.userIndex(), userLogInDTO.IndexString());
+        return userDomainService.matchPassword(user.userId(), userLogInDTO.password());
+    }
+
+    @Override
+    public void removeUser(UserGeneralRequestDTO userGeneralRequestDTO) {
+
+        User user = userDomainService.searchUserEntity(userGeneralRequestDTO.userIndex(), userGeneralRequestDTO.indexString());
+        userDomainService.removeUser(user.getId());
     }
 
     @Override
     public void resetPassword(ResetUserPasswordDTO resetUserPasswordDTO) {
 
+    }
+
+    @Override
+    public boolean checkUserExistence(UserGeneralRequestDTO userGeneralRequestDTO) {
+
+        return userDomainService.checkUserExistence(userGeneralRequestDTO.userIndex(), userGeneralRequestDTO.indexString());
     }
 }

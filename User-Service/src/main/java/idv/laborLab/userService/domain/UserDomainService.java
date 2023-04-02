@@ -1,18 +1,28 @@
 package idv.laborLab.userService.domain;
 
 import idv.laborLab.userService.dto.*;
+import idv.laborLab.userService.entity.User;
+import idv.laborLab.userService.entity.UserSecurityInfo;
 
 public interface UserDomainService {
 
     long registerUser(UserRegistrationDTO user);
 
-    UserDTO searchUser(SearchUserRequestDTO searchUserRequestDTO);
+    UserDTO searchUser(UserIndex userIndex, String searchString);
 
-    UserDTO updateUser(UpdateUserInfoDTO updateUserInfoDTO);
+    User searchUserEntity(UserIndex userIndex, String searchString);
 
-    boolean validateUser(SearchUserRequestDTO searchUserRequestDTO);
+    UserSecurityInfo searchUserSecurityInfo(long userId);
 
-    void removeUser(SearchUserRequestDTO searchUserRequestDTO);
+    boolean checkUserExistence(UserIndex userIndex, String searchString);
+
+    boolean matchPassword(long userId, String password);
+
+    UserDTO updateUser(User user);
+
+    boolean validateUser(UserGeneralRequestDTO userGeneralRequestDTO);
+
+    void removeUser(long userId);
 
     // temporary
     void resetPassword(ResetUserPasswordDTO resetUserPasswordDTO);

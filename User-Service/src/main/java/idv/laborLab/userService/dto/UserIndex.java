@@ -5,8 +5,9 @@ import lombok.Getter;
 
 @Getter
 @AllArgsConstructor
-public enum SearchField {
+public enum UserIndex {
 
     USER_NAME,
-    EMAIL;
+    EMAIL,
+    PHONE_NUMBER;
 }
