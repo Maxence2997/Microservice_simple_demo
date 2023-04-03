@@ -6,10 +6,10 @@
     <parent>
         <groupId>idv.laborLab</groupId>
         <artifactId>parent-pom</artifactId>
-        <version>${revision}</version>
+        <version>1.0.0-SNAPSHOT</version>
     </parent>
 
-    <artifactId>Config-Client</artifactId>
+    <artifactId>config-client</artifactId>
 
     <properties>
         <maven.compiler.source>17</maven.compiler.source>
@@ -30,5 +30,24 @@
             <artifactId>spring-boot-starter-web</artifactId>
         </dependency>
     </dependencies>
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+                <version>3.0.5</version>
+                <configuration>
+                    <excludes>
+                        <exclude>
+                            <groupId>org.projectlombok</groupId>
+                            <artifactId>lombok</artifactId>
+                        </exclude>
+                    </excludes>
+                    <imageName>${project.name}</imageName>
+                    <tag>${version}</tag>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
 
 </project>

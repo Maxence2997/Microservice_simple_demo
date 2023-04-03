@@ -6,11 +6,12 @@
     <parent>
         <groupId>idv.laborLab</groupId>
         <artifactId>parent-pom</artifactId>
-        <version>${revision}</version>
+<!--        <version>${revision}</version>-->
+        <version>1.0.0-SNAPSHOT</version>
     </parent>
-    <artifactId>Shared-Library</artifactId>
+    <artifactId>shared-library</artifactId>
     <version>${shared-library.version}</version>
-    <packaging>pom</packaging>
+    <packaging>jar</packaging>
     <properties>
         <maven.compiler.source>17</maven.compiler.source>
         <maven.compiler.target>17</maven.compiler.target>
@@ -23,5 +24,4 @@
             <artifactId>spring-boot-starter-web</artifactId>
         </dependency>
     </dependencies>
-
 </project>
