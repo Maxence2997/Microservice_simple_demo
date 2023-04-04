@@ -27,7 +27,11 @@ spring:
           max-active: 8
           min-idle: 0
       connect-timeout: 10
-
+  rabbitmq:
+    host: localhost
+    port: 5672
+    username: root
+    password: root
 eureka:
   client:
     serviceUrl:

@@ -1,5 +1,7 @@
 package idv.laborLab.userService.domain;
 
+import idv.laborLab.queueGateway.queueService.UserRegistrationQueueService;
+import idv.laborLab.sharedLibrary.objects.UserRegistrationSO;
 import idv.laborLab.userService.dto.*;
 import idv.laborLab.userService.entity.User;
 import idv.laborLab.userService.entity.UserSecurityInfo;
@@ -21,31 +23,17 @@ public class UserDomainServiceImpl implements UserDomainService {
     private final UserRepository userRepository;
     private final UserSecurityInfoRepository userSecurityInfoRepository;
     private final EncryptionService encryptionService;
+    private final UserRegistrationQueueService userRegistrationQueueService;
 
     @Override
     public long registerUser(UserRegistrationDTO userRegistrationDTO) {
 
-        User user = User.builder()
-                        .userName(userRegistrationDTO.userName())
-                        .firstName(userRegistrationDTO.firstName())
-                        .lastName(userRegistrationDTO.lastName())
-                        .email(userRegistrationDTO.email())
-                        .phoneNumber(userRegistrationDTO.phoneNumber())
-                        .dateOfBirth(userRegistrationDTO.dateOfBirth())
-                        .addressId(0)                           //temp
-                        .build();
+        // write into Redis first and then convert to queue for mysql
+        UserRegistrationSO userRegistrationSO = userRegistrationDTO.convertToUserRegistrationSO();
 
-        long userId = userRepository.save(user).getId();
-        //        String encryptedPassword = encryptionService.encrypt(userRegistrationDTO.password());
+        userRegistrationQueueService.convertAndSend(userRegistrationSO);
 
-        UserSecurityInfo userSecurityInfo = UserSecurityInfo.builder()
-                                                            .userId(userId)
-//                                                              .password(encryptedPassword)
-                                                            .passwordByte(encryptionService.encryptToByte(userRegistrationDTO.password()))
-                                                            .build();
-
-        userSecurityInfoRepository.save(userSecurityInfo);
-        return userId;
+        return 0;
     }
 
     @Cacheable(key = "#searchString") // testing
@@ -54,7 +42,6 @@ public class UserDomainServiceImpl implements UserDomainService {
 
         return searchUserEntity(userIndex, searchString).convertToUserDTO();
     }
-
 
     @Override
     public User searchUserEntity(UserIndex userIndex, String searchString) {
@@ -120,5 +107,28 @@ public class UserDomainServiceImpl implements UserDomainService {
     @Override
     public void resetPassword(ResetUserPasswordDTO resetUserPasswordDTO) {
 
+    }
+
+    @Override
+    public void saveUserInfo(UserRegistrationSO userRegistrationSO) {
+
+        User user = User.builder()
+                        .userName(userRegistrationSO.getUserName())
+                        .firstName(userRegistrationSO.getFirstName())
+                        .lastName(userRegistrationSO.getLastName())
+                        .email(userRegistrationSO.getEmail())
+                        .phoneNumber(userRegistrationSO.getPhoneNumber())
+                        .dateOfBirth(userRegistrationSO.getDateOfBirth())
+                        .addressId(0)                           //temp
+                        .build();
+
+        long userId = userRepository.save(user).getId();
+
+        UserSecurityInfo userSecurityInfo = UserSecurityInfo.builder()
+                                                            .userId(userId)
+                                                            .passwordByte(encryptionService.encryptToByte(userRegistrationSO.getPassword()))
+                                                            .build();
+
+        userSecurityInfoRepository.save(userSecurityInfo);
     }
 }

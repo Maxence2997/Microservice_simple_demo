@@ -27,6 +27,7 @@
 <!--        <revision>1.0.0-SNAPSHOT</revision>-->
         <shared-library.version>1.0.0-SNAPSHOT</shared-library.version>
         <exception-handler.version>1.0.0-SNAPSHOT</exception-handler.version>
+        <queue-gateway.version>1.0.0-SNAPSHOT</queue-gateway.version>
         <redis-client.version>1.0.0-SNAPSHOT</redis-client.version>
     </properties>
 
@@ -39,6 +40,7 @@
         <module>shared-library</module>
         <module>redis-client</module>
         <module>exception-handler</module>
+        <module>queue-gateway</module>
     </modules>
 
     <dependencies>

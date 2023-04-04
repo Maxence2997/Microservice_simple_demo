@@ -1,5 +1,6 @@
 package idv.laborLab.userService.domain;
 
+import idv.laborLab.sharedLibrary.objects.UserRegistrationSO;
 import idv.laborLab.userService.dto.*;
 import idv.laborLab.userService.entity.User;
 import idv.laborLab.userService.entity.UserSecurityInfo;
@@ -26,4 +27,6 @@ public interface UserDomainService {
 
     // temporary
     void resetPassword(ResetUserPasswordDTO resetUserPasswordDTO);
+
+    void saveUserInfo(UserRegistrationSO userRegistrationSO);
 }
