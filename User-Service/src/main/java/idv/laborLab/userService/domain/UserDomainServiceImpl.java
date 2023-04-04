@@ -8,11 +8,14 @@ import idv.laborLab.userService.repository.UserRepository;
 import idv.laborLab.userService.repository.UserSecurityInfoRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.cache.annotation.CacheConfig;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 @Service
 @Slf4j
 @RequiredArgsConstructor
+@CacheConfig(cacheNames = "userService")
 public class UserDomainServiceImpl implements UserDomainService {
 
     private final UserRepository userRepository;
@@ -29,7 +32,7 @@ public class UserDomainServiceImpl implements UserDomainService {
                         .email(userRegistrationDTO.email())
                         .phoneNumber(userRegistrationDTO.phoneNumber())
                         .dateOfBirth(userRegistrationDTO.dateOfBirth())
-                        .addressId(0)//temp
+                        .addressId(0)                           //temp
                         .build();
 
         long userId = userRepository.save(user).getId();
@@ -37,7 +40,7 @@ public class UserDomainServiceImpl implements UserDomainService {
 
         UserSecurityInfo userSecurityInfo = UserSecurityInfo.builder()
                                                             .userId(userId)
-                                                            //                                                            .password(encryptedPassword)
+//                                                              .password(encryptedPassword)
                                                             .passwordByte(encryptionService.encryptToByte(userRegistrationDTO.password()))
                                                             .build();
 
@@ -45,11 +48,13 @@ public class UserDomainServiceImpl implements UserDomainService {
         return userId;
     }
 
+    @Cacheable(key = "#searchString") // testing
     @Override
     public UserDTO searchUser(UserIndex userIndex, String searchString) {
 
         return searchUserEntity(userIndex, searchString).convertToUserDTO();
     }
+
 
     @Override
     public User searchUserEntity(UserIndex userIndex, String searchString) {

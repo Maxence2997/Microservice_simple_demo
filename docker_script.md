@@ -26,3 +26,7 @@
 
 ` docker run --name rabbitmq -p 15672:15672 -p 5672:5672 -e RABBITMQ_DEFAULT_USER=root -e RABBITMQ_DEFAULT_PASS=root -d rabbitmq:3.11.10-management`
     - customize user and password
+
+## redis
+
+`docker run --name redis -p 6379:6379 -d redis-server --requirepass "root"`

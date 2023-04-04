@@ -1,7 +1,25 @@
 package idv.laborLab.userService.dto;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+import java.io.Serializable;
 import java.time.LocalDate;
 
-public record UserDTO(long userId, String userName, String firstName, String lastName, String email, String address,
-                      String phoneNumber, LocalDate dateOfBirth) {
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
+public class UserDTO implements Serializable {
+
+    private long userId;
+    private String userName;
+    private String firstName;
+    private String lastName;
+    private String email;
+    private String address;
+    private String phoneNumber;
+    private LocalDate dateOfBirth;
 }

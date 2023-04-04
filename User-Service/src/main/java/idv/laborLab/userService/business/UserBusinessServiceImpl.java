@@ -10,7 +10,7 @@ import org.springframework.stereotype.Service;
 @Service
 @Slf4j
 @RequiredArgsConstructor
-public class UserBusinessImpl implements UserBusinessService {
+public class UserBusinessServiceImpl implements UserBusinessService {
 
     private final UserDomainService userDomainService;
 
@@ -46,7 +46,7 @@ public class UserBusinessImpl implements UserBusinessService {
     public boolean logInUser(UserLogInDTO userLogInDTO) {
 
         UserDTO user = userDomainService.searchUser(userLogInDTO.userIndex(), userLogInDTO.IndexString());
-        return userDomainService.matchPassword(user.userId(), userLogInDTO.password());
+        return userDomainService.matchPassword(user.getUserId(), userLogInDTO.password());
     }
 
     @Override

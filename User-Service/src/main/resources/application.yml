@@ -15,6 +15,18 @@ spring:
       ddl-auto: create-drop # only for testing
     database-platform: org.hibernate.dialect.MySQLDialect
     generate-ddl: true
+  data:
+    redis:
+      host: localhost
+      port: 6379
+      cacheDuration: 10 # minutes
+      password:
+      jedis:
+        pool:
+          enabled: true
+          max-active: 8
+          min-idle: 0
+      connect-timeout: 10
 
 eureka:
   client:
