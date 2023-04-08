@@ -1,4 +1,4 @@
-package idv.laborLab.userService.repository;
+package idv.laborLab.userService.repo;
 
 import idv.laborLab.userService.entity.UserSecurityInfo;
 import org.springframework.data.jpa.repository.JpaRepository;

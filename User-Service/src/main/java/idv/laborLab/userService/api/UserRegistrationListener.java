@@ -18,7 +18,7 @@ public class UserRegistrationListener {
     public void userRegistrationHandler(UserRegistrationSO userRegistrationSO) {
 
         try {
-            userDomainService.saveUserInfo(userRegistrationSO);
+            userDomainService.registerUserPostProcess(userRegistrationSO);
         } catch (Exception e) {
             log.error(e.getMessage());
         }

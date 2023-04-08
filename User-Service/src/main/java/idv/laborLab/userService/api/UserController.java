@@ -3,10 +3,12 @@ package idv.laborLab.userService.api;
 import idv.laborLab.userService.business.UserBusinessService;
 import idv.laborLab.userService.dto.*;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+@Slf4j
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("/api/user")
@@ -18,7 +20,13 @@ public class UserController {
     @PostMapping("/register")
     public ResponseEntity<Long> registerUser(@RequestBody UserRegistrationDTO userRegistrationDTO) {
 
-        return ResponseEntity.status(HttpStatus.CREATED).body(userBusinessService.registerUser(userRegistrationDTO));
+        log.info("=========================== register user process start ==============================");
+
+        long newUserId = userBusinessService.registerUser(userRegistrationDTO);
+
+        log.info("=========================== register user process terminate ==============================");
+
+        return ResponseEntity.status(HttpStatus.CREATED).body(newUserId);
     }
 
     // get specific user

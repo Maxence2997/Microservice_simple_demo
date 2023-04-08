@@ -8,16 +8,15 @@ import org.springframework.stereotype.Service;
 
 import static idv.laborLab.queueGateway.config.UserRegistrationConfiguration.USER_REGISTRATION;
 
-
 @Slf4j
 @Service
-public class UserRegistrationQueueServiceImpl implements UserRegistrationQueueService{
-
+public class UserRegistrationQueueServiceImpl implements UserRegistrationQueueService {
 
     private final RabbitTemplate rabbitTemplate;
 
     @Autowired
-    public UserRegistrationQueueServiceImpl(RabbitTemplate rabbitTemplate){
+    public UserRegistrationQueueServiceImpl(RabbitTemplate rabbitTemplate) {
+
         log.info("Setting exchange: {}, routingKey: {}", USER_REGISTRATION, USER_REGISTRATION);
         rabbitTemplate.setExchange(USER_REGISTRATION);
         rabbitTemplate.setRoutingKey(USER_REGISTRATION);
@@ -25,7 +24,8 @@ public class UserRegistrationQueueServiceImpl implements UserRegistrationQueueSe
     }
 
     public void convertAndSend(UserRegistrationSO userRegistrationSO) {
+
+        log.info("convert data to queue, data: {}, exchange: {}, routingKey: {}", userRegistrationSO, USER_REGISTRATION, USER_REGISTRATION);
         rabbitTemplate.convertAndSend(userRegistrationSO);
     }
-
 }

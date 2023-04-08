@@ -1,13 +1,16 @@
 package idv.laborLab.userService.domain;
 
 import idv.laborLab.queueGateway.queueService.UserRegistrationQueueService;
+import idv.laborLab.redisClient.repo.RedisGeneralValueRepository;
 import idv.laborLab.sharedLibrary.objects.UserRegistrationSO;
+import idv.laborLab.sharedLibrary.services.IDService;
 import idv.laborLab.userService.dto.*;
 import idv.laborLab.userService.entity.User;
 import idv.laborLab.userService.entity.UserSecurityInfo;
 import idv.laborLab.userService.exception.UserNotFoundException;
-import idv.laborLab.userService.repository.UserRepository;
-import idv.laborLab.userService.repository.UserSecurityInfoRepository;
+import idv.laborLab.userService.repo.UserRedisRepository;
+import idv.laborLab.userService.repo.UserRepository;
+import idv.laborLab.userService.repo.UserSecurityInfoRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.cache.annotation.CacheConfig;
@@ -24,16 +27,46 @@ public class UserDomainServiceImpl implements UserDomainService {
     private final UserSecurityInfoRepository userSecurityInfoRepository;
     private final EncryptionService encryptionService;
     private final UserRegistrationQueueService userRegistrationQueueService;
+    private final IDService redisIDService;
+    private final UserRedisRepository userRedisRepository;
+    private final RedisGeneralValueRepository redisGeneralValueRepository;
 
     @Override
     public long registerUser(UserRegistrationDTO userRegistrationDTO) {
 
-        // write into Redis first and then convert to queue for mysql
-        UserRegistrationSO userRegistrationSO = userRegistrationDTO.convertToUserRegistrationSO();
+        log.info("=============================== register user process start ===============================");
+        // check redis cache is there any conflict
 
-        userRegistrationQueueService.convertAndSend(userRegistrationSO);
+        // write into Redis first
 
-        return 0;
+        User user = userRegistrationDTO.convertToUserEntity();
+        long newId = redisIDService.getNextID();
+        user.setId(newId);
+        userRedisRepository.save(user);
+//        redisGeneralValueRepository.save("userEmail",user.getEmail()); still testing -> can be used as cache
+
+        byte[] encryptedPassword = encryptionService.encryptToByte(userRegistrationDTO.getPassword());
+        // convert to shared object and send it to queue for mysql
+        userRegistrationQueueService.convertAndSend(userRegistrationDTO.buildUserRegistrationSO(newId, encryptedPassword));
+        log.info("=============================== register user process terminate ===============================");
+
+        return newId;
+    }
+
+    @Override
+    public void registerUserPostProcess(UserRegistrationSO userRegistrationSO) {
+
+        log.info("========================= register user post process start ==========================");
+
+        User user = User.buildFromUserRegistrationSO(userRegistrationSO);
+        log.info("save data into database: {}", user);
+        userRepository.save(user);
+
+        UserSecurityInfo userSecurityInfo = UserSecurityInfo.buildFromUserRegistrationSO(userRegistrationSO);
+        log.info("save data into database: {}", userSecurityInfo);
+        userSecurityInfoRepository.save(userSecurityInfo);
+
+        log.info("========================= register user post process terminate ==========================");
     }
 
     @Cacheable(key = "#searchString") // testing
@@ -52,8 +85,6 @@ public class UserDomainServiceImpl implements UserDomainService {
                                                    .orElseThrow(() -> new UserNotFoundException(searchString));
             case EMAIL -> user = userRepository.findUserByEmail(searchString)
                                                .orElseThrow(() -> new UserNotFoundException(searchString));
-            case PHONE_NUMBER -> user = userRepository.findUserByPhoneNumber(searchString)
-                                                      .orElseThrow(() -> new UserNotFoundException(searchString));
         }
         return user;
     }
@@ -73,7 +104,6 @@ public class UserDomainServiceImpl implements UserDomainService {
 
             case USER_NAME -> result = userRepository.existsUserByUserName(searchString);
             case EMAIL -> result = userRepository.existsUserByEmail(searchString);
-            case PHONE_NUMBER -> result = userRepository.existsUserByPhoneNumber(searchString);
         }
 
         return result;
@@ -107,28 +137,5 @@ public class UserDomainServiceImpl implements UserDomainService {
     @Override
     public void resetPassword(ResetUserPasswordDTO resetUserPasswordDTO) {
 
-    }
-
-    @Override
-    public void saveUserInfo(UserRegistrationSO userRegistrationSO) {
-
-        User user = User.builder()
-                        .userName(userRegistrationSO.getUserName())
-                        .firstName(userRegistrationSO.getFirstName())
-                        .lastName(userRegistrationSO.getLastName())
-                        .email(userRegistrationSO.getEmail())
-                        .phoneNumber(userRegistrationSO.getPhoneNumber())
-                        .dateOfBirth(userRegistrationSO.getDateOfBirth())
-                        .addressId(0)                           //temp
-                        .build();
-
-        long userId = userRepository.save(user).getId();
-
-        UserSecurityInfo userSecurityInfo = UserSecurityInfo.builder()
-                                                            .userId(userId)
-                                                            .passwordByte(encryptionService.encryptToByte(userRegistrationSO.getPassword()))
-                                                            .build();
-
-        userSecurityInfoRepository.save(userSecurityInfo);
     }
 }

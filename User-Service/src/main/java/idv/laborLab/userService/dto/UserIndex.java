@@ -8,6 +8,5 @@ import lombok.Getter;
 public enum UserIndex {
 
     USER_NAME,
-    EMAIL,
-    PHONE_NUMBER;
+    EMAIL;
 }

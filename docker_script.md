@@ -30,3 +30,7 @@
 ## redis
 
 `docker run --name redis -p 6379:6379 -d redis-server --requirepass "root"`
+
+## Note
+
+- `docker ps -f "status=exited"` -> to list all stopped containers

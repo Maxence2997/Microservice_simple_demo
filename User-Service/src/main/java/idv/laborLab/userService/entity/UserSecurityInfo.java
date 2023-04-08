@@ -1,5 +1,7 @@
 package idv.laborLab.userService.entity;
 
+import idv.laborLab.sharedLibrary.objects.UserRegistrationSO;
+import idv.laborLab.sharedLibrary.objects.UserSecurityInfoSO;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -22,4 +24,15 @@ public class UserSecurityInfo {
     private long id;
     private byte[] passwordByte;
     private long userId;    // one to one with user entity
+
+    public static UserSecurityInfo buildFromUserRegistrationSO(UserRegistrationSO userRegistrationSO) {
+
+        UserSecurityInfoSO userSecurityInfoSO = userRegistrationSO.getUserSecurityInfoSO();
+
+        return UserSecurityInfo.builder()
+                               .id(0)
+                               .userId(userSecurityInfoSO.getUserId())
+                               .passwordByte(userSecurityInfoSO.getPasswordByte())
+                               .build();
+    }
 }

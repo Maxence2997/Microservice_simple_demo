@@ -9,6 +9,8 @@ public interface UserDomainService {
 
     long registerUser(UserRegistrationDTO user);
 
+    void registerUserPostProcess(UserRegistrationSO userRegistrationSO);
+
     UserDTO searchUser(UserIndex userIndex, String searchString);
 
     User searchUserEntity(UserIndex userIndex, String searchString);
@@ -27,6 +29,4 @@ public interface UserDomainService {
 
     // temporary
     void resetPassword(ResetUserPasswordDTO resetUserPasswordDTO);
-
-    void saveUserInfo(UserRegistrationSO userRegistrationSO);
 }

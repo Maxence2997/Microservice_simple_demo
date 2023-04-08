@@ -1,5 +1,7 @@
 package idv.laborLab.userService.entity;
 
+import idv.laborLab.sharedLibrary.objects.UserRegistrationSO;
+import idv.laborLab.sharedLibrary.objects.UserSO;
 import idv.laborLab.userService.dto.UserDTO;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -15,7 +17,6 @@ import java.time.LocalDate;
                 @Index(name = "full_name", columnList = "firstName, lastName"),
                 @Index(name = "user_name", columnList = "userName", unique = true),
                 @Index(name = "email", columnList = "email", unique = true),
-                @Index(name = "phone_number", columnList = "phoneNumber", unique = true)
         })
 @Data
 @NoArgsConstructor
@@ -24,7 +25,6 @@ import java.time.LocalDate;
 public class User {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
     @Column(unique = true)
     private String userName;
@@ -32,7 +32,6 @@ public class User {
     private String lastName;
     @Column(unique = true)
     private String email;
-    @Column(unique = true)
     private String phoneNumber;
     private LocalDate dateOfBirth;
     private long addressId;
@@ -40,5 +39,21 @@ public class User {
     public UserDTO convertToUserDTO() {
 
         return new UserDTO(this.id, this.userName, this.firstName, this.lastName, this.email, "", this.phoneNumber, this.dateOfBirth);
+    }
+
+    public static User buildFromUserRegistrationSO(UserRegistrationSO userRegistrationSO) {
+
+        UserSO userSO = userRegistrationSO.getUserSO();
+
+        return User.builder()
+                   .id(userSO.getId())
+                   .userName(userSO.getUserName())
+                   .firstName(userSO.getFirstName())
+                   .lastName(userSO.getLastName())
+                   .email(userSO.getEmail())
+                   .phoneNumber(userSO.getPhoneNumber())
+                   .dateOfBirth(userSO.getDateOfBirth())
+                   .addressId(0)                           //temp
+                   .build();
     }
 }

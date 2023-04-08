@@ -1,15 +1,15 @@
-package idv.laborLab.redisClient;
+package idv.laborLab.redisClient.config;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.databind.json.JsonMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.cache.annotation.CachingConfigurerSupport;
 import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.redis.cache.RedisCacheConfiguration;
+import org.springframework.data.redis.connection.RedisConnectionFactory;
 import org.springframework.data.redis.connection.RedisStandaloneConfiguration;
 import org.springframework.data.redis.connection.jedis.JedisClientConfiguration;
 import org.springframework.data.redis.connection.jedis.JedisConnectionFactory;
@@ -23,13 +23,13 @@ import java.time.Duration;
 
 @EnableCaching
 @Configuration
-public class RedisConfiguration extends CachingConfigurerSupport {
+public class RedisConfiguration {
 
     @Value("${spring.data.redis.cacheDuration:10}")
     private int cacheDuration;
 
     @Bean
-    public JedisConnectionFactory jedisConnectionFactory(JedisClientConfiguration jedisClientConfiguration) {
+    public RedisConnectionFactory jedisConnectionFactory(JedisClientConfiguration jedisClientConfiguration) {
 
         RedisStandaloneConfiguration redisStandaloneConfiguration = new RedisStandaloneConfiguration();
 
@@ -63,11 +63,12 @@ public class RedisConfiguration extends CachingConfigurerSupport {
     }
 
     @Bean
-    public RedisTemplate<String, Object> redisTemplate(JedisConnectionFactory jedisConnectionFactory, RedisSerializer<Object> redisJsonSerializer,
-                                                       StringRedisSerializer redisStringSerializer) {
+    public RedisTemplate<String, ? extends Object> redisTemplate(RedisConnectionFactory redisConnectionFactory,
+                                                                 RedisSerializer<Object> redisJsonSerializer,
+                                                                 StringRedisSerializer redisStringSerializer) {
 
         RedisTemplate<String, Object> template = new RedisTemplate<>();
-        template.setConnectionFactory(jedisConnectionFactory);
+        template.setConnectionFactory(redisConnectionFactory);
         template.setHashKeySerializer(redisStringSerializer);
         template.setKeySerializer(redisStringSerializer);
         template.setHashValueSerializer(redisJsonSerializer);
@@ -85,13 +86,13 @@ public class RedisConfiguration extends CachingConfigurerSupport {
                                       .serializeValuesWith(RedisSerializationContext.SerializationPair.fromSerializer(redisJsonSerializer));
     }
 
-//    @Bean
-//    public RedisCacheManagerBuilderCustomizer redisCacheManagerBuilderCustomizer() {
-//
-//        return (builder) -> builder
-//                .withCacheConfiguration("itemCache",
-//                                        RedisCacheConfiguration.defaultCacheConfig().entryTtl(Duration.ofMinutes(10)))
-//                .withCacheConfiguration("customerCache",
-//                                        RedisCacheConfiguration.defaultCacheConfig().entryTtl(Duration.ofMinutes(5)));
-//    }
+    //    @Bean
+    //    public RedisCacheManagerBuilderCustomizer redisCacheManagerBuilderCustomizer() {
+    //
+    //        return (builder) -> builder
+    //                .withCacheConfiguration("itemCache",
+    //                                        RedisCacheConfiguration.defaultCacheConfig().entryTtl(Duration.ofMinutes(10)))
+    //                .withCacheConfiguration("customerCache",
+    //                                        RedisCacheConfiguration.defaultCacheConfig().entryTtl(Duration.ofMinutes(5)));
+    //    }
 }

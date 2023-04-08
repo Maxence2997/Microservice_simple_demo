@@ -8,11 +8,12 @@ import lombok.NoArgsConstructor;
 import java.io.Serializable;
 
 @Data
-@AllArgsConstructor
 @NoArgsConstructor
+@AllArgsConstructor
 @Builder
-public class UserRegistrationSO implements Serializable {
+public class UserSecurityInfoSO implements Serializable {
 
-    private UserSO userSO;
-    private UserSecurityInfoSO userSecurityInfoSO;
+    private long id;
+    private byte[] passwordByte;
+    private long userId;    // one to one with user entity
 }
