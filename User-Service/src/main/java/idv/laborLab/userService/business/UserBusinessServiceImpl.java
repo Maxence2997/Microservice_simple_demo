@@ -23,7 +23,7 @@ public class UserBusinessServiceImpl implements UserBusinessService {
     @Override
     public UserDTO searchUser(UserGeneralRequestDTO userGeneralRequestDTO) {
 
-        return userDomainService.searchUser(userGeneralRequestDTO.userIndex(), userGeneralRequestDTO.indexString());
+        return userDomainService.searchUserEntity(userGeneralRequestDTO.userIndex(), userGeneralRequestDTO.indexString()).convertToUserDTO();
     }
 
     @Override

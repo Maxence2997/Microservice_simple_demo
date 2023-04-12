@@ -6,7 +6,7 @@
 
 ### How to connect mysql running in the container
 
-1. Connect using mysql client directly to the mysql in docker: `docker exec -it mysql57 mysql -uroot -p`
+1. Connect using mysql client directly to the mysql in docker: `docker exec -it mysql mysql -uroot -p`
 (If this is a fresh installation you will be asked to change the password using ALTER USER command. Do it.)
 
 2. Run SQL: `update mysql.user set host = '%' where user='root';`
@@ -20,7 +20,7 @@
 
 `docker pull rabbitmq:3.11.10-management`
 
-`docker run --name myrabbitmq -p 15672:15672 -p 5672:5672 -d rabbitmq:management
+`docker run --name rabbitmq -p 15672:15672 -p 5672:5672 -d rabbitmq:management
 `
     - using default user and password: guest/guest
 
@@ -29,8 +29,13 @@
 
 ## redis
 
-`docker run --name redis -p 6379:6379 -d redis-server --requirepass "root"`
+`docker run --name redis -p 6379:6379 -d redis --requirepass "root"`
 
 ## Note
 
 - `docker ps -f "status=exited"` -> to list all stopped containers
+- `mvn spring-boot:build-image -DskipTests` -> script to build an image, must execute in the project dir.
+- `docker run --name discovery-server -p 8761:8761 -d discovery-server` -> run discovery server
+
+
+https://codenotary.com/blog/extremely-useful-docker-commands

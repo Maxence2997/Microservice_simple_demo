@@ -33,6 +33,7 @@ public class UserRegistrationDTO {
                    .lastName(this.lastName)
                    .email(this.email)
                    .phoneNumber(this.phoneNumber)
+                   .dateOfBirth(this.dateOfBirth)
                    .build();
     }
 

@@ -12,7 +12,7 @@ spring:
   jpa:
     show-sql: true
     hibernate:
-      ddl-auto: create-drop # only for testing
+      ddl-auto: update # only for testing
     database-platform: org.hibernate.dialect.MySQLDialect
     generate-ddl: true
   data:
@@ -20,7 +20,7 @@ spring:
       host: localhost
       port: 6379
       cacheDuration: 10 # minutes
-      password:
+      password: root
       jedis:
         pool:
           enabled: true

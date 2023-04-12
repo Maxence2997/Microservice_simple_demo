@@ -97,7 +97,6 @@
                         </exclude>
                     </excludes>
                     <imageName>${project.name}</imageName>
-                    <tag>${version}</tag>
                 </configuration>
             </plugin>
         </plugins>

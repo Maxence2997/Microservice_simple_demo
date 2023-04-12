@@ -1,6 +1,7 @@
 package idv.laborLab.userService.domain;
 
 import idv.laborLab.queueGateway.queueService.UserRegistrationQueueService;
+import idv.laborLab.redisClient.annotation.LaborLabCacheable;
 import idv.laborLab.redisClient.repo.RedisGeneralValueRepository;
 import idv.laborLab.sharedLibrary.objects.UserRegistrationSO;
 import idv.laborLab.sharedLibrary.services.IDService;
@@ -13,14 +14,15 @@ import idv.laborLab.userService.repo.UserRepository;
 import idv.laborLab.userService.repo.UserSecurityInfoRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.cache.annotation.CacheConfig;
-import org.springframework.cache.annotation.Cacheable;
+import org.springframework.context.annotation.EnableAspectJAutoProxy;
 import org.springframework.stereotype.Service;
+
+import java.util.concurrent.CompletableFuture;
 
 @Service
 @Slf4j
 @RequiredArgsConstructor
-@CacheConfig(cacheNames = "userService")
+@EnableAspectJAutoProxy(proxyTargetClass = true, exposeProxy = true)
 public class UserDomainServiceImpl implements UserDomainService {
 
     private final UserRepository userRepository;
@@ -34,7 +36,6 @@ public class UserDomainServiceImpl implements UserDomainService {
     @Override
     public long registerUser(UserRegistrationDTO userRegistrationDTO) {
 
-        log.info("=============================== register user process start ===============================");
         // check redis cache is there any conflict
 
         // write into Redis first
@@ -43,12 +44,14 @@ public class UserDomainServiceImpl implements UserDomainService {
         long newId = redisIDService.getNextID();
         user.setId(newId);
         userRedisRepository.save(user);
-//        redisGeneralValueRepository.save("userEmail",user.getEmail()); still testing -> can be used as cache
+        CompletableFuture.runAsync(() -> {
 
-        byte[] encryptedPassword = encryptionService.encryptToByte(userRegistrationDTO.getPassword());
-        // convert to shared object and send it to queue for mysql
-        userRegistrationQueueService.convertAndSend(userRegistrationDTO.buildUserRegistrationSO(newId, encryptedPassword));
-        log.info("=============================== register user process terminate ===============================");
+            byte[] encryptedPassword = encryptionService.encryptToByte(userRegistrationDTO.getPassword());
+
+            // convert to shared object and send it to queue for mysql
+            userRegistrationQueueService.convertAndSend(userRegistrationDTO.buildUserRegistrationSO(newId,
+                                                                                                    encryptedPassword));
+        });
 
         return newId;
     }
@@ -69,18 +72,22 @@ public class UserDomainServiceImpl implements UserDomainService {
         log.info("========================= register user post process terminate ==========================");
     }
 
-    @Cacheable(key = "#searchString") // testing
+
     @Override
     public UserDTO searchUser(UserIndex userIndex, String searchString) {
 
         return searchUserEntity(userIndex, searchString).convertToUserDTO();
     }
 
+    @LaborLabCacheable(hashKeys = "User", returnType = User.class)
     @Override
     public User searchUserEntity(UserIndex userIndex, String searchString) {
 
+        log.info("looking for an User with {} in Database", searchString);
         User user = new User();
+
         switch (userIndex) {
+
             case USER_NAME -> user = userRepository.findUserByUserName(searchString)
                                                    .orElseThrow(() -> new UserNotFoundException(searchString));
             case EMAIL -> user = userRepository.findUserByEmail(searchString)

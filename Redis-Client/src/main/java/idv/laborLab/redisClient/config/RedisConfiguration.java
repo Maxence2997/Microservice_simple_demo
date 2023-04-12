@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.databind.json.JsonMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.autoconfigure.data.redis.RedisProperties;
 import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -28,11 +29,12 @@ public class RedisConfiguration {
     @Value("${spring.data.redis.cacheDuration:10}")
     private int cacheDuration;
 
+
     @Bean
-    public RedisConnectionFactory jedisConnectionFactory(JedisClientConfiguration jedisClientConfiguration) {
+    public RedisConnectionFactory jedisConnectionFactory(JedisClientConfiguration jedisClientConfiguration, RedisProperties redisProperties) {
 
         RedisStandaloneConfiguration redisStandaloneConfiguration = new RedisStandaloneConfiguration();
-
+        redisStandaloneConfiguration.setPassword(redisProperties.getPassword());
         return new JedisConnectionFactory(redisStandaloneConfiguration, jedisClientConfiguration);
     }
 
