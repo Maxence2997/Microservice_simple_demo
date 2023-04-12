@@ -1,7 +1,6 @@
 package idv.laborLab.userService.aspect;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import idv.laborLab.redisClient.annotation.LaborLabCacheable;
 import idv.laborLab.sharedLibrary.tools.aspect.AspectUtil;
 import idv.laborLab.userService.dto.UserIndex;
 import idv.laborLab.userService.entity.User;
@@ -16,6 +15,7 @@ import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Component;
 
 import java.util.Optional;
+import java.util.concurrent.CompletableFuture;
 
 @Component
 @Aspect
@@ -38,17 +38,16 @@ public class CachedAspect {
     }
 
     @Pointcut("@annotation(idv.laborLab.redisClient.annotation.LaborLabCacheable)")
-    public void laborCached() {}
+    public void cacheable() {}
 
     @Pointcut("execution(* *..domain.UserDomainServiceImpl.searchUserEntity(..))")
     public void searchUserEntity() {}
 
-    @Around("searchUserEntity()")
+    @Around("searchUserEntity() && cacheable()")
     public Object cacheUserEntity(ProceedingJoinPoint proceedingJoinPoint) throws Throwable {
 
         String searchString = aspectUtil.getParameter(proceedingJoinPoint, "searchString", String.class);
         UserIndex userIndex = aspectUtil.getParameter(proceedingJoinPoint, "userIndex", UserIndex.class);
-        LaborLabCacheable laborLabCacheable = aspectUtil.getAnnotation(proceedingJoinPoint, LaborLabCacheable.class);
 
         log.info("looking for an User with {} in Redis cache", searchString);
         Optional<User> userOptional = Optional.empty();
@@ -61,10 +60,14 @@ public class CachedAspect {
         }
 
         if (userOptional.isPresent()) {
-            log.info("Found User in Redis cache");
+            log.info("Found User {} in Redis cache", userOptional.get());
             return userOptional.get();
         }
+        User user = objectMapper.convertValue(proceedingJoinPoint.proceed(), User.class);
 
-        return objectMapper.convertValue(proceedingJoinPoint.proceed(), laborLabCacheable.returnType());
+        // write it into User cache
+        CompletableFuture.runAsync(() -> userRedisRepository.save(user));
+
+        return user;
     }
 }
