@@ -8,7 +8,7 @@ public interface UserBusinessService {
 
     UserDTO searchUser(UserGeneralRequestDTO userGeneralRequestDTO);
 
-    UserDTO updateUser(UpdateUserInfoDTO updateUserInfoDTO);
+    UserDTO updateUser(UserDTO userDTO);
 
     boolean validateUser(UserGeneralRequestDTO userGeneralRequestDTO);
 

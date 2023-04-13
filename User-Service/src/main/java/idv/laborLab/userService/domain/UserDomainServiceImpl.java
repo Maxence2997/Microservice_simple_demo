@@ -1,6 +1,8 @@
 package idv.laborLab.userService.domain;
 
 import idv.laborLab.queueGateway.queueService.UserRegistrationQueueService;
+import idv.laborLab.redisClient.annotation.LaborLabCacheEvict;
+import idv.laborLab.redisClient.annotation.LaborLabCachePut;
 import idv.laborLab.redisClient.annotation.LaborLabCacheable;
 import idv.laborLab.redisClient.repo.RedisGeneralValueRepository;
 import idv.laborLab.sharedLibrary.objects.UserRegistrationSO;
@@ -49,8 +51,7 @@ public class UserDomainServiceImpl implements UserDomainService {
             byte[] encryptedPassword = encryptionService.encryptToByte(userRegistrationDTO.getPassword());
 
             // convert to shared object and send it to queue for mysql
-            userRegistrationQueueService.convertAndSend(userRegistrationDTO.buildUserRegistrationSO(newId,
-                                                                                                    encryptedPassword));
+            userRegistrationQueueService.convertAndSend(userRegistrationDTO.buildUserRegistrationSO(newId, encryptedPassword));
         });
 
         return newId;
@@ -72,14 +73,13 @@ public class UserDomainServiceImpl implements UserDomainService {
         log.info("========================= register user post process terminate ==========================");
     }
 
-
     @Override
     public UserDTO searchUser(UserIndex userIndex, String searchString) {
 
         return searchUserEntity(userIndex, searchString).convertToUserDTO();
     }
 
-    @LaborLabCacheable(hashKeys = "User", returnType = User.class)
+    @LaborLabCacheable(keys = "User")
     @Override
     public User searchUserEntity(UserIndex userIndex, String searchString) {
 
@@ -123,9 +123,11 @@ public class UserDomainServiceImpl implements UserDomainService {
         return encryptionService.decrypt(passwordByte).equals(password);
     }
 
+    @LaborLabCachePut(keys = "User")
     @Override
-    public UserDTO updateUser(User user) {
+    public UserDTO updateUser(UserDTO userDTO) {
 
+        User user = userDTO.convertToUserEntity();
         return userRepository.save(user).convertToUserDTO();
     }
 
@@ -135,10 +137,12 @@ public class UserDomainServiceImpl implements UserDomainService {
         return false;
     }
 
+    @LaborLabCacheEvict(keys = "User")
     @Override
-    public void removeUser(long userId) {
+    public void removeUser(UserDTO userDTO) {
 
-        userRepository.deleteById(userId);
+        log.warn("Remove User with userName {}, email: {} in Database", userDTO.getUserName(), userDTO.getEmail());
+        userRepository.deleteById(userDTO.getUserId());
     }
 
     @Override

@@ -21,11 +21,11 @@ public interface UserDomainService {
 
     boolean matchPassword(long userId, String password);
 
-    UserDTO updateUser(User user);
+    UserDTO updateUser(UserDTO userDTO);
 
     boolean validateUser(UserGeneralRequestDTO userGeneralRequestDTO);
 
-    void removeUser(long userId);
+    void removeUser(UserDTO userDTO);
 
     // temporary
     void resetPassword(ResetUserPasswordDTO resetUserPasswordDTO);

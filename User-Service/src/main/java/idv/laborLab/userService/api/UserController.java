@@ -38,9 +38,9 @@ public class UserController {
 
     // update user info
     @PutMapping("/update")
-    public ResponseEntity<UserDTO> updateUser(@RequestBody UpdateUserInfoDTO updateUserInfoDTO) {
+    public ResponseEntity<UserDTO> updateUser(@RequestBody UserDTO userDTO) {
 
-        return ResponseEntity.status(HttpStatus.ACCEPTED).body(userBusinessService.updateUser(updateUserInfoDTO));
+        return ResponseEntity.status(HttpStatus.ACCEPTED).body(userBusinessService.updateUser(userDTO));
     }
 
     //    // validate user
@@ -68,5 +68,12 @@ public class UserController {
     public ResponseEntity<Boolean> checkUserExistence(@RequestBody UserGeneralRequestDTO userGeneralRequestDTO) {
 
         return ResponseEntity.status(HttpStatus.OK).body(userBusinessService.checkUserExistence(userGeneralRequestDTO));
+    }
+
+    @PostMapping("/remove")
+    public ResponseEntity<?> removeUser(@RequestBody UserGeneralRequestDTO userGeneralRequestDTO) {
+
+        userBusinessService.removeUser(userGeneralRequestDTO);
+        return ResponseEntity.status(HttpStatus.OK).build();
     }
 }

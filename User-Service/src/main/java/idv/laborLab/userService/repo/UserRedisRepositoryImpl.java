@@ -39,16 +39,43 @@ public class UserRedisRepositoryImpl implements UserRedisRepository {
     @Override
     public Optional<User> findByEmail(String email) {
 
-        return Optional.ofNullable(this.redisTemplate.opsForHash().get(KEY, email))
-                       .map(object -> objectMapper.convertValue(object, String.class))
-                       .filter(StringUtils::isNotBlank)
-                       .flatMap(this::findBy);
+        return this.findUserNameByEmail(email)
+                   .flatMap(this::findByUserName);
     }
 
     @Override
-    public User update(User mappingValue) {
+    public Optional<User> findByUserName(String userName) {
 
-        return null;
+        return this.findBy(userName);
+    }
+
+    @Override
+    public void delete(User user) {
+
+        this.deleteBy(user.getEmail());
+        this.deleteBy(user.getUserName());
+    }
+
+    @Override
+    public void deleteByUserName(String userName) {
+
+        this.findByUserName(userName).ifPresent(user -> {this.deleteBy(user.getEmail()); this.deleteBy(user.getUserName());});
+    }
+
+    @Override
+    public void deleteByEmail(String email) {
+
+        this.findUserNameByEmail(email).ifPresentOrElse(userName -> {this.deleteBy(userName); this.deleteBy(email);}, () -> this.deleteBy(email));
+    }
+
+    @Override
+    public void update(User user) {
+
+        // if user data present then delete it
+        this.findBy(user.getUserName()).ifPresent(this::delete);
+
+        // save the new one
+        this.save(user);
     }
 
     @Override
@@ -64,7 +91,15 @@ public class UserRedisRepositoryImpl implements UserRedisRepository {
     }
 
     @Override
-    public void delete(String mappingKey) {
+    public void deleteBy(String mappingKey) {
 
+        this.redisTemplate.opsForHash().delete(KEY, mappingKey);
+    }
+
+    private Optional<String> findUserNameByEmail(String email) {
+
+        return Optional.ofNullable(this.redisTemplate.opsForHash().get(KEY, email))
+                       .map(userName -> objectMapper.convertValue(userName, String.class))
+                       .filter(StringUtils::isNotBlank);
     }
 }

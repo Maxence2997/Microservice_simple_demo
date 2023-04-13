@@ -9,11 +9,11 @@ public interface RedisHashRepository<T> {
 
     Optional<T> findBy(String mappingKey);
 
-    T update(T mappingValue);
+    void update(T mappingValue);
 
     boolean exist(String mappingKey);
 
     List<T> getAll();
 
-    void delete(String mappingKey);
+    void deleteBy(String mappingKey);
 }

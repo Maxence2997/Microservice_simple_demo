@@ -9,7 +9,7 @@ import java.lang.annotation.Target;
 
 @Target(ElementType.METHOD)
 @Retention(RetentionPolicy.RUNTIME)
-public @interface LaborLabCacheable {
+public @interface LaborLabCachePut {
 
     @AliasFor("cacheNames")
     String[] keys() default {};

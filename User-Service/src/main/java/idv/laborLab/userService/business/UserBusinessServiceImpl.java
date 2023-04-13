@@ -2,7 +2,6 @@ package idv.laborLab.userService.business;
 
 import idv.laborLab.userService.domain.UserDomainService;
 import idv.laborLab.userService.dto.*;
-import idv.laborLab.userService.entity.User;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -27,13 +26,10 @@ public class UserBusinessServiceImpl implements UserBusinessService {
     }
 
     @Override
-    public UserDTO updateUser(UpdateUserInfoDTO updateUserInfoDTO) {
+    public UserDTO updateUser(UserDTO userDTO) {
         //do some business check later
 
-        User user = userDomainService.searchUserEntity(updateUserInfoDTO.userIndex(), updateUserInfoDTO.indexString());
-        user.setEmail(updateUserInfoDTO.email());
-        user.setPhoneNumber(updateUserInfoDTO.phoneNumber());
-        return userDomainService.updateUser(user);
+        return userDomainService.updateUser(userDTO);
     }
 
     @Override
@@ -52,8 +48,9 @@ public class UserBusinessServiceImpl implements UserBusinessService {
     @Override
     public void removeUser(UserGeneralRequestDTO userGeneralRequestDTO) {
 
-        User user = userDomainService.searchUserEntity(userGeneralRequestDTO.userIndex(), userGeneralRequestDTO.indexString());
-        userDomainService.removeUser(user.getId());
+//        UserDTO userDTO = userDomainService.searchUser(userGeneralRequestDTO.userIndex(), userGeneralRequestDTO.indexString());
+        UserDTO userDTO = UserDTO.builder().email(userGeneralRequestDTO.indexString()).build();
+        userDomainService.removeUser(userDTO);
     }
 
     @Override

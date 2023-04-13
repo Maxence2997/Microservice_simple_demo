@@ -2,11 +2,14 @@ package idv.laborLab.userService.aspect;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import idv.laborLab.sharedLibrary.tools.aspect.AspectUtil;
+import idv.laborLab.userService.dto.UserDTO;
 import idv.laborLab.userService.dto.UserIndex;
 import idv.laborLab.userService.entity.User;
 import idv.laborLab.userService.repo.UserRedisRepository;
 import lombok.extern.slf4j.Slf4j;
+import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.ProceedingJoinPoint;
+import org.aspectj.lang.annotation.AfterReturning;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Pointcut;
@@ -40,11 +43,23 @@ public class CachedAspect {
     @Pointcut("@annotation(idv.laborLab.redisClient.annotation.LaborLabCacheable)")
     public void cacheable() {}
 
+    @Pointcut("@annotation(idv.laborLab.redisClient.annotation.LaborLabCacheEvict)")
+    public void cacheEvict() {}
+
+    @Pointcut("@annotation(idv.laborLab.redisClient.annotation.LaborLabCachePut)")
+    public void cachePut() {}
+
     @Pointcut("execution(* *..domain.UserDomainServiceImpl.searchUserEntity(..))")
     public void searchUserEntity() {}
 
+    @Pointcut("execution(* *..domain.UserDomainServiceImpl.removeUser(..))")
+    public void removeUserEntity() {}
+
+    @Pointcut("execution(* *..domain.UserDomainServiceImpl.updateUser(..))")
+    public void updateUserEntity() {}
+
     @Around("searchUserEntity() && cacheable()")
-    public Object cacheUserEntity(ProceedingJoinPoint proceedingJoinPoint) throws Throwable {
+    public User cacheUserEntity(ProceedingJoinPoint proceedingJoinPoint) throws Throwable {
 
         String searchString = aspectUtil.getParameter(proceedingJoinPoint, "searchString", String.class);
         UserIndex userIndex = aspectUtil.getParameter(proceedingJoinPoint, "userIndex", UserIndex.class);
@@ -69,5 +84,25 @@ public class CachedAspect {
         CompletableFuture.runAsync(() -> userRedisRepository.save(user));
 
         return user;
+    }
+
+    @AfterReturning("removeUserEntity() && cacheEvict()")
+    public void cacheEvictUserEntity(JoinPoint joinPoint) {
+
+        UserDTO userDTO = aspectUtil.getParameter(joinPoint, "userDTO", UserDTO.class);
+
+        log.info("Evict an User with userName {}, email {} in Redis cache", userDTO.getUserName(), userDTO.getEmail());
+
+        CompletableFuture.runAsync(() -> userRedisRepository.delete(userDTO.convertToUserEntity()));
+    }
+
+    @AfterReturning("updateUserEntity() && cachePut()")
+    public void updateUserEntity(JoinPoint joinPoint) {
+
+        UserDTO userDTO = aspectUtil.getParameter(joinPoint, "userDTO", UserDTO.class);
+
+        log.info("update user with userName {}, email {} in Redis cache", userDTO.getUserName(), userDTO.getEmail());
+
+        CompletableFuture.runAsync(() -> userRedisRepository.update(userDTO.convertToUserEntity()));
     }
 }
