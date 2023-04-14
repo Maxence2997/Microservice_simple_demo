@@ -10,7 +10,7 @@
     </parent>
     <groupId>idv.laborLab</groupId>
     <artifactId>parent-pom</artifactId>
-<!--    <version>${revision}</version>        &lt;!&ndash; can't use ${revision} for spring-boot-maven-plugin &ndash;&gt;-->
+    <!--    <version>${revision}</version>        &lt;!&ndash; can't use ${revision} for spring-boot-maven-plugin &ndash;&gt;-->
     <version>1.0.0-SNAPSHOT</version>
     <name>parent-pom</name>
     <description>parent-pom</description>
@@ -22,13 +22,17 @@
         <spring-cloud.version>2022.0.1</spring-cloud.version>
         <maven.complier.source>17</maven.complier.source>
         <maven.complier.target>17</maven.complier.target>
-        <lombok.version>1.18.26</lombok.version>
+
         <webflux.version>3.0.4</webflux.version>
-<!--        <revision>1.0.0-SNAPSHOT</revision>-->
+        <!--        <revision>1.0.0-SNAPSHOT</revision>-->
         <shared-library.version>1.0.0-SNAPSHOT</shared-library.version>
         <exception-handler.version>1.0.0-SNAPSHOT</exception-handler.version>
         <queue-gateway.version>1.0.0-SNAPSHOT</queue-gateway.version>
         <redis-client.version>1.0.0-SNAPSHOT</redis-client.version>
+        <maven.compiler.source>17</maven.compiler.source>
+        <maven.compiler.target>17</maven.compiler.target>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <maven.test.skip>true</maven.test.skip>
     </properties>
 
     <modules>
@@ -37,10 +41,6 @@
         <module>user-service</module>
         <module>record-service</module>
         <module>config-client</module>
-        <module>shared-library</module>
-        <module>redis-client</module>
-        <module>exception-handler</module>
-        <module>queue-gateway</module>
     </modules>
 
     <dependencies>
@@ -53,20 +53,10 @@
             <artifactId>spring-cloud-starter-bootstrap</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.projectlombok</groupId>
-            <artifactId>lombok</artifactId>
-            <version>${lombok.version}</version>
-        </dependency>
-        <dependency>
             <groupId>org.testcontainers</groupId>
             <artifactId>junit-jupiter</artifactId>
             <version>1.17.6</version>
             <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.commons</groupId>
-            <artifactId>commons-lang3</artifactId>
-            <version>3.12.0</version>
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -82,10 +72,25 @@
             <artifactId>spring-boot-test</artifactId>
             <scope>test</scope>
         </dependency>
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-lang3</artifactId>
+        </dependency>
     </dependencies>
 
     <dependencyManagement>
         <dependencies>
+            <dependency>
+                <groupId>idv.laborLab</groupId>
+                <artifactId>library-definition</artifactId>
+                <version>1.0.0-SNAPSHOT</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
             <dependency>
                 <groupId>org.testcontainers</groupId>
                 <artifactId>testcontainers-bom</artifactId>

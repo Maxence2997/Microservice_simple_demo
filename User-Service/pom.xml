@@ -51,22 +51,18 @@
         <dependency>
             <groupId>idv.laborLab</groupId>
             <artifactId>shared-library</artifactId>
-            <version>${shared-library.version}</version>
         </dependency>
         <dependency>
             <groupId>idv.laborLab</groupId>
             <artifactId>redis-client</artifactId>
-            <version>${redis-client.version}</version>
         </dependency>
         <dependency>
             <groupId>idv.laborLab</groupId>
             <artifactId>exception-handler</artifactId>
-            <version>${exception-handler.version}</version>
         </dependency>
         <dependency>
             <groupId>idv.laborLab</groupId>
             <artifactId>queue-gateway</artifactId>
-            <version>${queue-gateway.version}</version>
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
