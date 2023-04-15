@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.lang.NonNull;
 
 import java.io.Serializable;
 import java.time.LocalDate;
@@ -16,9 +17,12 @@ import java.time.LocalDate;
 public class UserDTO implements Serializable {
 
     private long userId;
+    @NonNull
     private String userName;
     private String firstName;
+
     private String lastName;
+    @NonNull
     private String email;
     private String address;
     private String phoneNumber;

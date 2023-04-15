@@ -1,4 +1,6 @@
 package idv.laborLab.userService.dto;
 
-public record UserGeneralRequestDTO(String indexString, UserIndex userIndex) {
+import org.springframework.lang.NonNull;
+
+public record UserGeneralRequestDTO(@NonNull String indexString, @NonNull UserIndex userIndex) {
 }

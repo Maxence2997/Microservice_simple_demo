@@ -30,9 +30,9 @@ public class UserRedisRepositoryImpl implements UserRedisRepository {
     }
 
     @Override
-    public Optional<User> findBy(String mappingKey) {
+    public Optional<User> findBy(String hashKey) {
 
-        return Optional.ofNullable(this.redisTemplate.opsForHash().get(KEY, mappingKey))
+        return Optional.ofNullable(this.redisTemplate.opsForHash().get(KEY, hashKey))
                        .map(object -> objectMapper.convertValue(object, User.class));   //Optional<User>
     }
 
@@ -79,7 +79,7 @@ public class UserRedisRepositoryImpl implements UserRedisRepository {
     }
 
     @Override
-    public boolean exist(String mappingKey) {
+    public boolean exist(String hashKey) {
 
         return false;
     }
@@ -91,9 +91,9 @@ public class UserRedisRepositoryImpl implements UserRedisRepository {
     }
 
     @Override
-    public void deleteBy(String mappingKey) {
+    public void deleteBy(String hashKey) {
 
-        this.redisTemplate.opsForHash().delete(KEY, mappingKey);
+        this.redisTemplate.opsForHash().delete(KEY, hashKey);
     }
 
     private Optional<String> findUserNameByEmail(String email) {

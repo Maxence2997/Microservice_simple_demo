@@ -60,7 +60,7 @@ public class UserDomainServiceImpl implements UserDomainService {
     @Override
     public void registerUserPostProcess(UserRegistrationSO userRegistrationSO) {
 
-        log.info("========================= register user post process start ==========================");
+        log.info("register user post process start");
 
         User user = User.buildFromUserRegistrationSO(userRegistrationSO);
         log.info("save data into database: {}", user);
@@ -70,7 +70,7 @@ public class UserDomainServiceImpl implements UserDomainService {
         log.info("save data into database: {}", userSecurityInfo);
         userSecurityInfoRepository.save(userSecurityInfo);
 
-        log.info("========================= register user post process terminate ==========================");
+        log.info("register user process terminate");
     }
 
     @Override

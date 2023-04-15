@@ -5,15 +5,15 @@ import java.util.Optional;
 
 public interface RedisHashRepository<T> {
 
-    void save(T mappingValue);
+    void save(T object);
 
-    Optional<T> findBy(String mappingKey);
+    Optional<T> findBy(String hashKey);
 
-    void update(T mappingValue);
+    void update(T object);
 
-    boolean exist(String mappingKey);
+    boolean exist(String hashKey);
 
     List<T> getAll();
 
-    void deleteBy(String mappingKey);
+    void deleteBy(String hashKey);
 }

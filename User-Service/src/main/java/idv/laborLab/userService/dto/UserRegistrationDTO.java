@@ -8,6 +8,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.lang.NonNull;
 
 import java.time.LocalDate;
 
@@ -17,12 +18,19 @@ import java.time.LocalDate;
 @Builder
 public class UserRegistrationDTO {
 
+    @NonNull
     private String userName;
+    @NonNull
     private String firstName;
+    @NonNull
     private String lastName;
+    @NonNull
     private String email;
+    @NonNull
     private String password;
+    @NonNull
     private String phoneNumber;
+    @NonNull
     private LocalDate dateOfBirth;
 
     public User convertToUserEntity() {
