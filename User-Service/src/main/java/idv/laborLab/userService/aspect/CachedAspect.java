@@ -69,15 +69,16 @@ public class CachedAspect {
 
         switch (userIndex) {
 
-            case USER_NAME -> userOptional = userRedisRepository.findBy(searchString);
-
+            case USER_NAME -> userOptional = userRedisRepository.findByUserName(searchString);
             case EMAIL -> userOptional = userRedisRepository.findByEmail(searchString);
+            case USER_ID -> userOptional = userRedisRepository.findByUserId(searchString);
         }
 
         if (userOptional.isPresent()) {
-            log.info("Found User {} in Redis cache", userOptional.get());
+            log.info("Found user in Redis cache, {}", userOptional.get());
             return userOptional.get();
         }
+
         User user = objectMapper.convertValue(proceedingJoinPoint.proceed(), User.class);
 
         // write it into User cache

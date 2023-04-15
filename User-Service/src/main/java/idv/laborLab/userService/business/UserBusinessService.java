@@ -8,6 +8,8 @@ public interface UserBusinessService {
 
     UserDTO searchUser(UserGeneralRequestDTO userGeneralRequestDTO);
 
+    UserDTO searchUserByUserName(String userName);
+
     UserDTO updateUser(UserDTO userDTO);
 
     boolean validateUser(UserGeneralRequestDTO userGeneralRequestDTO);

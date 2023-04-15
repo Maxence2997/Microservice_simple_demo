@@ -38,6 +38,12 @@ public class UserController {
         return ResponseEntity.status(HttpStatus.OK).body(userBusinessService.searchUser(userGeneralRequestDTO));
     }
 
+    @PostMapping("/search/{userName}")
+    public ResponseEntity<UserDTO> searchUserByUserName(@PathVariable("userName") String userName) {
+
+        return ResponseEntity.status(HttpStatus.OK).body(userBusinessService.searchUserByUserName(userName));
+    }
+
     // update user info
     @PutMapping("/update")
     public ResponseEntity<UserDTO> updateUser(@RequestBody @NonNull UserDTO userDTO) {

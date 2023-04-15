@@ -13,6 +13,8 @@ public interface UserDomainService {
 
     UserDTO searchUser(UserIndex userIndex, String searchString);
 
+    UserDTO searchUserByUserName(String userName);
+
     User searchUserEntity(UserIndex userIndex, String searchString);
 
     UserSecurityInfo searchUserSecurityInfo(long userId);

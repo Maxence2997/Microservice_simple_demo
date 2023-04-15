@@ -22,7 +22,13 @@ public class UserBusinessServiceImpl implements UserBusinessService {
     @Override
     public UserDTO searchUser(UserGeneralRequestDTO userGeneralRequestDTO) {
 
-        return userDomainService.searchUserEntity(userGeneralRequestDTO.userIndex(), userGeneralRequestDTO.indexString()).convertToUserDTO();
+        return userDomainService.searchUser(userGeneralRequestDTO.userIndex(), userGeneralRequestDTO.indexString());
+    }
+
+    @Override
+    public UserDTO searchUserByUserName(String userName) {
+
+        return userDomainService.searchUserByUserName(userName);
     }
 
     @Override
@@ -48,8 +54,7 @@ public class UserBusinessServiceImpl implements UserBusinessService {
     @Override
     public void removeUser(UserGeneralRequestDTO userGeneralRequestDTO) {
 
-//        UserDTO userDTO = userDomainService.searchUser(userGeneralRequestDTO.userIndex(), userGeneralRequestDTO.indexString());
-        UserDTO userDTO = UserDTO.builder().email(userGeneralRequestDTO.indexString()).build();
+        UserDTO userDTO = userDomainService.searchUser(userGeneralRequestDTO.userIndex(), userGeneralRequestDTO.indexString());
         userDomainService.removeUser(userDTO);
     }
 

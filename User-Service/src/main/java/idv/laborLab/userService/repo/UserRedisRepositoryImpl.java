@@ -23,8 +23,8 @@ public class UserRedisRepositoryImpl implements UserRedisRepository {
     @Override
     public void save(User user) {
 
-        log.info("save value into redis, key: {}, hashKey: {},  value: {}",
-                 KEY, user.getUserName(), user);
+        log.info("save value into redis, key: {}, hashKey: {},  value: {}", KEY, user.getUserName(), user);
+        this.redisTemplate.opsForHash().put(KEY, String.valueOf(user.getId()), user.getUserName());
         this.redisTemplate.opsForHash().put(KEY, user.getEmail(), user.getUserName());
         this.redisTemplate.opsForHash().put(KEY, user.getUserName(), user);
     }
@@ -32,8 +32,16 @@ public class UserRedisRepositoryImpl implements UserRedisRepository {
     @Override
     public Optional<User> findBy(String hashKey) {
 
+        log.info("looking for user by: {}", hashKey);
         return Optional.ofNullable(this.redisTemplate.opsForHash().get(KEY, hashKey))
                        .map(object -> objectMapper.convertValue(object, User.class));   //Optional<User>
+    }
+
+    @Override
+    public Optional<User> findByUserId(String userIdString) {
+
+        return this.findUserNameByUserId(userIdString)
+                   .flatMap(this::findByUserName);
     }
 
     @Override
@@ -52,6 +60,8 @@ public class UserRedisRepositoryImpl implements UserRedisRepository {
     @Override
     public void delete(User user) {
 
+        log.info("delete user in redis cache, {}", user);
+        this.deleteBy(String.valueOf(user.getId()));
         this.deleteBy(user.getEmail());
         this.deleteBy(user.getUserName());
     }
@@ -81,7 +91,7 @@ public class UserRedisRepositoryImpl implements UserRedisRepository {
     @Override
     public boolean exist(String hashKey) {
 
-        return false;
+        return this.findBy(hashKey).isPresent();
     }
 
     @Override
@@ -99,6 +109,13 @@ public class UserRedisRepositoryImpl implements UserRedisRepository {
     private Optional<String> findUserNameByEmail(String email) {
 
         return Optional.ofNullable(this.redisTemplate.opsForHash().get(KEY, email))
+                       .map(userName -> objectMapper.convertValue(userName, String.class))
+                       .filter(StringUtils::isNotBlank);
+    }
+
+    private Optional<String> findUserNameByUserId(String userIdString) {
+
+        return Optional.ofNullable(this.redisTemplate.opsForHash().get(KEY, userIdString))
                        .map(userName -> objectMapper.convertValue(userName, String.class))
                        .filter(StringUtils::isNotBlank);
     }

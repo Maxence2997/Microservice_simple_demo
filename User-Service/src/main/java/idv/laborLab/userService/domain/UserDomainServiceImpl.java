@@ -16,6 +16,7 @@ import idv.laborLab.userService.repo.UserRepository;
 import idv.laborLab.userService.repo.UserSecurityInfoRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.aop.framework.AopContext;
 import org.springframework.context.annotation.EnableAspectJAutoProxy;
 import org.springframework.stereotype.Service;
 
@@ -76,7 +77,13 @@ public class UserDomainServiceImpl implements UserDomainService {
     @Override
     public UserDTO searchUser(UserIndex userIndex, String searchString) {
 
-        return searchUserEntity(userIndex, searchString).convertToUserDTO();
+        return ((UserDomainServiceImpl) AopContext.currentProxy()).searchUserEntity(userIndex, searchString).convertToUserDTO();
+    }
+
+    @Override
+    public UserDTO searchUserByUserName(String userName) {
+
+        return searchUserEntity(UserIndex.USER_NAME, userName).convertToUserDTO();
     }
 
     @LaborLabCacheable(keys = "User")
@@ -92,6 +99,8 @@ public class UserDomainServiceImpl implements UserDomainService {
                                                    .orElseThrow(() -> new UserNotFoundException(searchString));
             case EMAIL -> user = userRepository.findUserByEmail(searchString)
                                                .orElseThrow(() -> new UserNotFoundException(searchString));
+            case USER_ID -> user = userRepository.findById(Long.valueOf(searchString))
+                                                 .orElseThrow(() -> new UserNotFoundException(searchString));
         }
         return user;
     }

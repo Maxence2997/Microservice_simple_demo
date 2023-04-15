@@ -9,11 +9,13 @@ import java.util.Optional;
  * Storing data structure of User entity in Redis Cache <br>
  * <p>
  * key --> value <br>
+ * userId --> userName <br>
  * userEmail --> userName <br>
  * userName  --> user data
  */
 public interface UserRedisRepository extends RedisHashRepository<User> {
 
+    Optional<User> findByUserId(String userIdString);
     Optional<User> findByEmail(String email);
 
     Optional<User> findByUserName(String userName);
