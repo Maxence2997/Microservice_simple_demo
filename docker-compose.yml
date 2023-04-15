@@ -1,0 +1,73 @@
+version: '3.8'
+
+services:
+  mysql:
+    container_name: mysql
+    image: mysql/mysql-server:8.0.32
+    networks:
+      - make-jobs-better
+    ports:
+      - "3307:3306"
+    #    volumes:
+    #      - /var/lib/mysql:/var/lib/mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_ROOT_HOST: '%'
+
+  redis:
+    container_name: redis
+    image: redis:latest
+    networks:
+      - make-jobs-better
+    ports:
+      - "6379:6379"
+    command: redis-server  --requirepass "root"
+  #    volumes:
+  #      - redis:/var/lib/redis/data
+  #      - ./redis.conf:/usr/local/etc/redis/redis.conf
+
+  rabbitmq:
+    container_name: rabbitmq
+    image: rabbitmq:3.11.10-management
+    networks:
+      - make-jobs-better
+    ports:
+      - "15672:15672"
+      - "5672:5672"
+    #    volumes:
+    #      -
+    environment:
+      RABBITMQ_DEFAULT_USER: root
+      RABBITMQ_DEFAULT_PASS: root
+
+  discovery-server:
+    container_name: discovery-server
+    image: idv.laborLab/discovery-server:1.1.0
+    networks:
+      - make-jobs-better
+    ports:
+      - "8761:8761"
+#    deploy:
+#      resources:
+#        limits:
+#          memory: 700m
+
+#  zipkin-server:
+#    image: openzipkin/zipkin:2.23
+#    ports:
+#      - "9411:9411"
+#    deploy:
+#      resources:
+#        limits:
+#          memory: 300m
+#    networks:
+#      - currency-network
+#    environment:
+#      RABBIT_URI: amqp://guest:guest@rabbitmq:5672
+#    depends_on:
+#      - rabbitmq
+#    restart: always #Restart if there is a problem starting up
+
+networks:
+  make-jobs-better:
+    driver: bridge # default
