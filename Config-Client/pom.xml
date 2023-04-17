@@ -31,23 +31,16 @@
         </dependency>
     </dependencies>
     <build>
-        <plugins>
-            <plugin>
-                <groupId>org.springframework.boot</groupId>
-                <artifactId>spring-boot-maven-plugin</artifactId>
-                <version>3.0.5</version>
-                <configuration>
-                    <excludes>
-                        <exclude>
-                            <groupId>org.projectlombok</groupId>
-                            <artifactId>lombok</artifactId>
-                        </exclude>
-                    </excludes>
-                    <imageName>${project.name}</imageName>
-                    <tag>${version}</tag>
-                </configuration>
-            </plugin>
-        </plugins>
+        <resources>
+            <resource>
+                <directory>src/main/resources</directory>
+                <filtering>true</filtering>
+                <excludes>
+                    <!--                    <exclude>**/application.yml</exclude>-->
+                    <!--                    <exclude>**/application.properties</exclude>-->
+                </excludes>
+            </resource>
+        </resources>
     </build>
 
 </project>
