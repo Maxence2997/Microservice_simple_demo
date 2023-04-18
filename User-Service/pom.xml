@@ -54,7 +54,7 @@
         </dependency>
         <dependency>
             <groupId>idv.laborLab</groupId>
-            <artifactId>shared-library</artifactId>
+            <artifactId>miscellaneous</artifactId>
         </dependency>
         <dependency>
             <groupId>idv.laborLab</groupId>

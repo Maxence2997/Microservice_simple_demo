@@ -1,7 +1,7 @@
 package idv.laborLab.userService.aspect;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import idv.laborLab.sharedLibrary.tools.aspect.AspectUtil;
+import idv.laborLab.sharedLibrary.miscellaneous.aspect.AspectUtil;
 import idv.laborLab.userService.dto.UserDTO;
 import idv.laborLab.userService.dto.UserIndex;
 import idv.laborLab.userService.entity.User;

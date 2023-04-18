@@ -22,13 +22,8 @@
         <spring-cloud.version>2022.0.1</spring-cloud.version>
         <maven.complier.source>17</maven.complier.source>
         <maven.complier.target>17</maven.complier.target>
-
-        <webflux.version>3.0.4</webflux.version>
         <!--        <revision>1.0.0-SNAPSHOT</revision>-->
         <shared-library.version>1.0.0-SNAPSHOT</shared-library.version>
-        <exception-handler.version>1.0.0-SNAPSHOT</exception-handler.version>
-        <queue-gateway.version>1.0.0-SNAPSHOT</queue-gateway.version>
-        <redis-client.version>1.0.0-SNAPSHOT</redis-client.version>
         <maven.compiler.source>17</maven.compiler.source>
         <maven.compiler.target>17</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -80,6 +75,7 @@
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
+            <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>org.apache.commons</groupId>
@@ -91,8 +87,8 @@
         <dependencies>
             <dependency>
                 <groupId>idv.laborLab</groupId>
-                <artifactId>library-definition</artifactId>
-                <version>1.0.0-SNAPSHOT</version>
+                <artifactId>shared-library</artifactId>
+                <version>${shared-library.version}</version>
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>

@@ -1,32 +1,95 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0"
-         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <parent>
-        <groupId>idv.laborLab</groupId>
-        <artifactId>parent-pom</artifactId>
-<!--        <version>${revision}</version>-->
-        <version>1.0.0-SNAPSHOT</version>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-parent</artifactId>
+        <version>3.0.5</version>
+        <relativePath/> <!-- lookup parent from repository -->
     </parent>
+    <groupId>idv.laborLab</groupId>
     <artifactId>shared-library</artifactId>
-    <version>${shared-library.version}</version>
-    <packaging>jar</packaging>
+    <version>1.0.0-SNAPSHOT</version>
+    <name>shared-library</name>
+    <description>custom libraries collection for dependency management</description>
+    <packaging>pom</packaging>
+
     <properties>
-        <maven.compiler.source>17</maven.compiler.source>
-        <maven.compiler.target>17</maven.compiler.target>
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <miscellaneous.version>1.0.0-SNAPSHOT</miscellaneous.version>
+        <exception-handler.version>1.0.0-SNAPSHOT</exception-handler.version>
+        <queue-gateway.version>1.0.0-SNAPSHOT</queue-gateway.version>
+        <redis-client.version>1.0.0-SNAPSHOT</redis-client.version>
+        <commons-lang3.version>3.12.0</commons-lang3.version>
         <lombok.version>1.18.26</lombok.version>
+        <maven.skip.tests>true</maven.skip.tests>
     </properties>
+    <modules>
+        <module>miscellaneous</module>
+        <module>queue-gateway</module>
+        <module>exception-handler</module>
+        <module>redis-client</module>
+    </modules>
     <dependencies>
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.aspectj</groupId>
-            <artifactId>aspectjweaver</artifactId>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <scope>provided</scope>
         </dependency>
-
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-lang3</artifactId>
+        </dependency>
     </dependencies>
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>idv.laborLab</groupId>
+                <artifactId>miscellaneous</artifactId>
+                <version>${miscellaneous.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>idv.laborLab</groupId>
+                <artifactId>redis-client</artifactId>
+                <version>${redis-client.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>idv.laborLab</groupId>
+                <artifactId>exception-handler</artifactId>
+                <version>${exception-handler.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>idv.laborLab</groupId>
+                <artifactId>queue-gateway</artifactId>
+                <version>${queue-gateway.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.projectlombok</groupId>
+                <artifactId>lombok</artifactId>
+                <version>${lombok.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.commons</groupId>
+                <artifactId>commons-lang3</artifactId>
+                <version>${commons-lang3.version}</version>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.8.1</version>
+                <configuration>
+                    <source>17</source>
+                    <target>17</target>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
 </project>

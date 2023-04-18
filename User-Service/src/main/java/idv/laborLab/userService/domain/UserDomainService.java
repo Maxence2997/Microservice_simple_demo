@@ -1,6 +1,6 @@
 package idv.laborLab.userService.domain;
 
-import idv.laborLab.sharedLibrary.objects.UserRegistrationSO;
+import idv.laborLab.sharedLibrary.miscellaneous.objects.UserRegistrationSO;
 import idv.laborLab.userService.dto.*;
 import idv.laborLab.userService.entity.User;
 import idv.laborLab.userService.entity.UserSecurityInfo;

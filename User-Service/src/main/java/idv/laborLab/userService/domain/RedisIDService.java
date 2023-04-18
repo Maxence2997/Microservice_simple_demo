@@ -1,6 +1,6 @@
 package idv.laborLab.userService.domain;
 
-import idv.laborLab.sharedLibrary.services.IDService;
+import idv.laborLab.sharedLibrary.miscellaneous.services.IDService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;

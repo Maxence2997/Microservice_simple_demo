@@ -1,7 +1,7 @@
 package idv.laborLab.userService.entity;
 
-import idv.laborLab.sharedLibrary.objects.UserRegistrationSO;
-import idv.laborLab.sharedLibrary.objects.UserSO;
+import idv.laborLab.sharedLibrary.miscellaneous.objects.UserRegistrationSO;
+import idv.laborLab.sharedLibrary.miscellaneous.objects.UserSO;
 import idv.laborLab.userService.dto.UserDTO;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
