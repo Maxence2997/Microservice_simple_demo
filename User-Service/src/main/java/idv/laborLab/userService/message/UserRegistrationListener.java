@@ -1,4 +1,4 @@
-package idv.laborLab.userService.api;
+package idv.laborLab.userService.message;
 
 import idv.laborLab.sharedLibrary.miscellaneous.objects.UserRegistrationSO;
 import idv.laborLab.userService.domain.UserDomainService;
