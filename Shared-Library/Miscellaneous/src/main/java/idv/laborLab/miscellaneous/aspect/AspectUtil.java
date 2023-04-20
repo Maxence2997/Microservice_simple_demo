@@ -1,4 +1,4 @@
-package idv.laborLab.sharedLibrary.miscellaneous.aspect;
+package idv.laborLab.miscellaneous.aspect;
 
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.reflect.MethodSignature;

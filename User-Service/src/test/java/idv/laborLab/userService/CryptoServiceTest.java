@@ -1,6 +1,6 @@
 package idv.laborLab.userService;
 
-import idv.laborLab.userService.domain.CryptoService;
+import idv.laborLab.miscellaneous.services.crypto.CryptoService;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

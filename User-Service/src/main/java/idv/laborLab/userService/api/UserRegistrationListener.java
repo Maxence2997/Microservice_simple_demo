@@ -1,6 +1,6 @@
 package idv.laborLab.userService.api;
 
-import idv.laborLab.sharedLibrary.miscellaneous.objects.UserRegistrationSO;
+import idv.laborLab.miscellaneous.objects.UserRegistrationSO;
 import idv.laborLab.userService.domain.UserDomainService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

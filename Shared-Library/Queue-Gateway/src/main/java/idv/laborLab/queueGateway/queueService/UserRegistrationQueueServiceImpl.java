@@ -1,7 +1,7 @@
 package idv.laborLab.queueGateway.queueService;
 
 
-import idv.laborLab.sharedLibrary.miscellaneous.objects.UserRegistrationSO;
+import idv.laborLab.miscellaneous.objects.UserRegistrationSO;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;

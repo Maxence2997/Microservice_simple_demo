@@ -1,4 +1,4 @@
-package idv.laborLab.userService.domain;
+package idv.laborLab.miscellaneous.services.crypto;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -17,7 +17,7 @@ import java.security.spec.AlgorithmParameterSpec;
 @Service
 @Slf4j
 @RequiredArgsConstructor
-public class AesGcmEncryptionEngine implements CryptoService {
+public class AesGcmCryptoEngine implements CryptoService {
 
     public static final String ALGORITHM_MODE = "AES/GCM/NoPadding";
     public static final String ALGORITHM = "AES";

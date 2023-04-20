@@ -1,8 +1,8 @@
 package idv.laborLab.userService.dto;
 
-import idv.laborLab.sharedLibrary.miscellaneous.objects.UserRegistrationSO;
-import idv.laborLab.sharedLibrary.miscellaneous.objects.UserSO;
-import idv.laborLab.sharedLibrary.miscellaneous.objects.UserSecurityInfoSO;
+import idv.laborLab.miscellaneous.objects.UserRegistrationSO;
+import idv.laborLab.miscellaneous.objects.UserSO;
+import idv.laborLab.miscellaneous.objects.UserSecurityInfoSO;
 import idv.laborLab.userService.entity.User;
 import lombok.AllArgsConstructor;
 import lombok.Builder;

@@ -1,4 +1,4 @@
-package idv.laborLab.userService.domain;
+package idv.laborLab.miscellaneous.services.crypto;
 
 public interface CryptoService {
 

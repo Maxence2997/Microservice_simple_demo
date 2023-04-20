@@ -1,12 +1,12 @@
 package idv.laborLab.userService.domain;
 
+import idv.laborLab.miscellaneous.objects.UserRegistrationSO;
+import idv.laborLab.miscellaneous.services.crypto.CryptoService;
+import idv.laborLab.miscellaneous.services.id.IDService;
 import idv.laborLab.queueGateway.queueService.UserRegistrationQueueService;
 import idv.laborLab.redisClient.annotation.LaborLabCacheEvict;
 import idv.laborLab.redisClient.annotation.LaborLabCachePut;
 import idv.laborLab.redisClient.annotation.LaborLabCacheable;
-import idv.laborLab.redisClient.repo.RedisGeneralValueRepository;
-import idv.laborLab.sharedLibrary.miscellaneous.objects.UserRegistrationSO;
-import idv.laborLab.sharedLibrary.miscellaneous.services.IDService;
 import idv.laborLab.userService.dto.*;
 import idv.laborLab.userService.entity.User;
 import idv.laborLab.userService.entity.UserSecurityInfo;
@@ -34,7 +34,6 @@ public class UserDomainServiceImpl implements UserDomainService {
     private final UserRegistrationQueueService userRegistrationQueueService;
     private final IDService redisIDService;
     private final UserRedisRepository userRedisRepository;
-    private final RedisGeneralValueRepository redisGeneralValueRepository;
 
     @Override
     public long registerUser(UserRegistrationDTO userRegistrationDTO) {

@@ -1,4 +1,4 @@
-package idv.laborLab.sharedLibrary.miscellaneous.objects;
+package idv.laborLab.miscellaneous.objects;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
