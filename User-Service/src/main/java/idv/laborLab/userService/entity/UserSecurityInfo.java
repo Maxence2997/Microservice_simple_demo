@@ -22,7 +22,7 @@ public class UserSecurityInfo {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
-    private byte[] passwordByte;
+    private String password;
     private long userId;    // one to one with user entity
 
     public static UserSecurityInfo buildFromUserRegistrationSO(UserRegistrationSO userRegistrationSO) {
@@ -32,7 +32,7 @@ public class UserSecurityInfo {
         return UserSecurityInfo.builder()
                                .id(0)
                                .userId(userSecurityInfoSO.getUserId())
-                               .passwordByte(userSecurityInfoSO.getPasswordByte())
+                               .password(userSecurityInfoSO.getPassword())
                                .build();
     }
 }

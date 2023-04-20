@@ -45,7 +45,7 @@ public class UserRegistrationDTO {
                    .build();
     }
 
-    public UserRegistrationSO buildUserRegistrationSO(long newId, byte[] encryptedPassword) {
+    public UserRegistrationSO buildUserRegistrationSO(long newId, String encryptedPassword) {
 
         UserSO userSO = UserSO.builder()
                               .id(newId)
@@ -58,7 +58,7 @@ public class UserRegistrationDTO {
                               .build();
         UserSecurityInfoSO userSecurityInfoSO = UserSecurityInfoSO.builder()
                                                                   .userId(newId)
-                                                                  .passwordByte(encryptedPassword)
+                                                                  .password(encryptedPassword)
                                                                   .build();
         return UserRegistrationSO.builder()
                                  .userSO(userSO)

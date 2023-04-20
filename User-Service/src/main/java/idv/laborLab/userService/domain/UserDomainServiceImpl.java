@@ -49,10 +49,10 @@ public class UserDomainServiceImpl implements UserDomainService {
         userRedisRepository.save(user);
         CompletableFuture.runAsync(() -> {
 
-//            byte[] encryptedPassword = encryptionService.encryptToByte(userRegistrationDTO.getPassword());
+            String encryptedPassword = cryptoService.encrypt(userRegistrationDTO.getPassword());
 
-            // convert to shared object and send it to queue for mysql
-//            userRegistrationQueueService.convertAndSend(userRegistrationDTO.buildUserRegistrationSO(newId, encryptedPassword));
+//             convert to shared object and send it to queue for mysql
+            userRegistrationQueueService.convertAndSend(userRegistrationDTO.buildUserRegistrationSO(newId, encryptedPassword));
         });
 
         return newId;
@@ -126,11 +126,10 @@ public class UserDomainServiceImpl implements UserDomainService {
     }
 
     @Override
-    public boolean matchPassword(long userId, String password) {
+    public boolean matchPassword(long userId, String passwordInput) {
 
-//        byte[] passwordByte = this.searchUserSecurityInfo(userId).getPasswordByte();
-//        return encryptionService.decrypt(passwordByte).equals(password);
-        return false;
+        String passwordEncrypted = this.searchUserSecurityInfo(userId).getPassword();
+        return cryptoService.decrypt(passwordEncrypted).equals(passwordInput);
     }
 
     @LaborLabCachePut(keys = "User")

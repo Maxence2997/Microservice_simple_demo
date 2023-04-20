@@ -14,6 +14,6 @@ import java.io.Serializable;
 public class UserSecurityInfoSO implements Serializable {
 
     private long id;
-    private byte[] passwordByte;
+    private String password;
     private long userId;    // one to one with user entity
 }
