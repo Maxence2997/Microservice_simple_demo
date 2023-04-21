@@ -4,6 +4,8 @@ import idv.laborLab.userService.dto.*;
 
 public interface UserBusinessService {
 
+    FindUsersResponseDTO findUsers(int page, int size);
+
     long registerUser(UserRegistrationDTO user);
 
     UserDTO searchUser(UserGeneralRequestDTO userGeneralRequestDTO);

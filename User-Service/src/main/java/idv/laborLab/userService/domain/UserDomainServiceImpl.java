@@ -18,8 +18,13 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.aop.framework.AopContext;
 import org.springframework.context.annotation.EnableAspectJAutoProxy;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
 @Service
@@ -36,6 +41,21 @@ public class UserDomainServiceImpl implements UserDomainService {
     private final UserRedisRepository userRedisRepository;
 
     @Override
+    public FindUsersResponseDTO findUsers(int page, int size) {
+
+        Pageable pageRequest = PageRequest.of(page, size, Sort.by("userName"));
+
+        Page<User> users = userRepository.findAll(pageRequest);
+        List<UserDTO> userDTOList = users.stream().map(User::convertToUserDTO).toList();
+
+        return FindUsersResponseDTO.builder()
+                                   .userDTOList(userDTOList)
+                                   .totalElements(users.getTotalElements())
+                                   .totalPages(users.getTotalPages())
+                                   .build();
+    }
+
+    @Override
     public long registerUser(UserRegistrationDTO userRegistrationDTO) {
 
         // check redis cache is there any conflict
@@ -50,7 +70,7 @@ public class UserDomainServiceImpl implements UserDomainService {
 
             String encryptedPassword = cryptoService.encrypt(userRegistrationDTO.getPassword());
 
-//             convert to shared object and send it to queue for mysql
+            //             convert to shared object and send it to queue for mysql
             userRegistrationQueueService.convertAndSend(userRegistrationDTO.buildUserRegistrationSO(newId, encryptedPassword));
         });
 
