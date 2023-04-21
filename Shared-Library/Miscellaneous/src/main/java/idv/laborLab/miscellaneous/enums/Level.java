@@ -1,4 +1,4 @@
-package idv.laborLab.sharedLibrary.miscellaneous.enums;
+package idv.laborLab.miscellaneous.enums;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;

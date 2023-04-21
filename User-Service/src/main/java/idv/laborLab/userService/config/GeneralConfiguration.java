@@ -7,16 +7,10 @@ import org.springframework.context.annotation.Configuration;
 
 @Data
 @Configuration
-@ConfigurationProperties("idv.laborlab")
+@ConfigurationProperties("idv.labor-lab")
 public class GeneralConfiguration {
 
     private String idCounterKey;
-
-    public void setIdCounterKey(String idCounterKey) {
-
-        this.idCounterKey = idCounterKey;
-    }
-
     @Bean
     public String idCounterKey(){
         return this.idCounterKey;

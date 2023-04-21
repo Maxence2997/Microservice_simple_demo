@@ -1,12 +1,12 @@
 package idv.laborLab.userService.domain;
 
+import idv.laborLab.miscellaneous.objects.UserRegistrationSO;
+import idv.laborLab.miscellaneous.services.crypto.CryptoService;
+import idv.laborLab.miscellaneous.services.id.IDService;
 import idv.laborLab.queueGateway.queueService.UserRegistrationQueueService;
 import idv.laborLab.redisClient.annotation.LaborLabCacheEvict;
 import idv.laborLab.redisClient.annotation.LaborLabCachePut;
 import idv.laborLab.redisClient.annotation.LaborLabCacheable;
-import idv.laborLab.redisClient.repo.RedisGeneralValueRepository;
-import idv.laborLab.sharedLibrary.miscellaneous.objects.UserRegistrationSO;
-import idv.laborLab.sharedLibrary.miscellaneous.services.IDService;
 import idv.laborLab.userService.dto.*;
 import idv.laborLab.userService.entity.User;
 import idv.laborLab.userService.entity.UserSecurityInfo;
@@ -30,11 +30,10 @@ public class UserDomainServiceImpl implements UserDomainService {
 
     private final UserRepository userRepository;
     private final UserSecurityInfoRepository userSecurityInfoRepository;
-    private final EncryptionService encryptionService;
+    private final CryptoService cryptoService;
     private final UserRegistrationQueueService userRegistrationQueueService;
     private final IDService redisIDService;
     private final UserRedisRepository userRedisRepository;
-    private final RedisGeneralValueRepository redisGeneralValueRepository;
 
     @Override
     public long registerUser(UserRegistrationDTO userRegistrationDTO) {
@@ -49,9 +48,9 @@ public class UserDomainServiceImpl implements UserDomainService {
         userRedisRepository.save(user);
         CompletableFuture.runAsync(() -> {
 
-            byte[] encryptedPassword = encryptionService.encryptToByte(userRegistrationDTO.getPassword());
+            String encryptedPassword = cryptoService.encrypt(userRegistrationDTO.getPassword());
 
-            // convert to shared object and send it to queue for mysql
+//             convert to shared object and send it to queue for mysql
             userRegistrationQueueService.convertAndSend(userRegistrationDTO.buildUserRegistrationSO(newId, encryptedPassword));
         });
 
@@ -126,10 +125,10 @@ public class UserDomainServiceImpl implements UserDomainService {
     }
 
     @Override
-    public boolean matchPassword(long userId, String password) {
+    public boolean matchPassword(long userId, String passwordInput) {
 
-        byte[] passwordByte = this.searchUserSecurityInfo(userId).getPasswordByte();
-        return encryptionService.decrypt(passwordByte).equals(password);
+        String passwordEncrypted = this.searchUserSecurityInfo(userId).getPassword();
+        return cryptoService.decrypt(passwordEncrypted).equals(passwordInput);
     }
 
     @LaborLabCachePut(keys = "User")

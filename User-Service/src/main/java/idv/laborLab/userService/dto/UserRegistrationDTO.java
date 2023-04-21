@@ -1,8 +1,8 @@
 package idv.laborLab.userService.dto;
 
-import idv.laborLab.sharedLibrary.miscellaneous.objects.UserRegistrationSO;
-import idv.laborLab.sharedLibrary.miscellaneous.objects.UserSO;
-import idv.laborLab.sharedLibrary.miscellaneous.objects.UserSecurityInfoSO;
+import idv.laborLab.miscellaneous.objects.UserRegistrationSO;
+import idv.laborLab.miscellaneous.objects.UserSO;
+import idv.laborLab.miscellaneous.objects.UserSecurityInfoSO;
 import idv.laborLab.userService.entity.User;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -45,7 +45,7 @@ public class UserRegistrationDTO {
                    .build();
     }
 
-    public UserRegistrationSO buildUserRegistrationSO(long newId, byte[] encryptedPassword) {
+    public UserRegistrationSO buildUserRegistrationSO(long newId, String encryptedPassword) {
 
         UserSO userSO = UserSO.builder()
                               .id(newId)
@@ -58,7 +58,7 @@ public class UserRegistrationDTO {
                               .build();
         UserSecurityInfoSO userSecurityInfoSO = UserSecurityInfoSO.builder()
                                                                   .userId(newId)
-                                                                  .passwordByte(encryptedPassword)
+                                                                  .password(encryptedPassword)
                                                                   .build();
         return UserRegistrationSO.builder()
                                  .userSO(userSO)

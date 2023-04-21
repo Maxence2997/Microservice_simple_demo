@@ -38,5 +38,10 @@ eureka:
       defaultZone: http://localhost:8761/eureka
 
 idv:
-  laborlab:
+  labor-lab:
     id-counter-key: userId
+    encryption:
+      key: testingEncryptionKey1234   # length of key should be 16, 24 or 32
+      initial-vector: initialVector
+      authentication-tag-length: 128  # Must be one of {128, 120, 112, 104, 96}
+      additional-authenticated-data: additionalAuthenticatedData

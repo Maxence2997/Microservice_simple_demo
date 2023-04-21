@@ -1,4 +1,4 @@
-package idv.laborLab.sharedLibrary.miscellaneous.request;
+package idv.laborLab.miscellaneous.request;
 
 import java.util.Map;
 
