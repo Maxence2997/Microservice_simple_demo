@@ -24,8 +24,6 @@
         <maven.complier.target>17</maven.complier.target>
         <!--        <revision>1.0.0-SNAPSHOT</revision>-->
         <shared-library.version>1.0.0-SNAPSHOT</shared-library.version>
-        <maven.compiler.source>17</maven.compiler.source>
-        <maven.compiler.target>17</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <maven.test.skip>true</maven.test.skip>
     </properties>
