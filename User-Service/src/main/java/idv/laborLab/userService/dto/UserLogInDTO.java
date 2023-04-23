@@ -1,4 +1,6 @@
 package idv.laborLab.userService.dto;
 
-public record UserLogInDTO(String IndexString, UserIndex userIndex, String password) {
+import org.springframework.lang.NonNull;
+
+public record UserLogInDTO(@NonNull String IndexString, @NonNull UserIndex userIndex, @NonNull String password) {
 }

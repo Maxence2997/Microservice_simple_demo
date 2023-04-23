@@ -14,6 +14,12 @@ public class UserBusinessServiceImpl implements UserBusinessService {
     private final UserDomainService userDomainService;
 
     @Override
+    public FindUsersResponseDTO findUsers(int page, int size) {
+
+        return userDomainService.findUsers(page, size);
+    }
+
+    @Override
     public long registerUser(UserRegistrationDTO user) {
 
         return userDomainService.registerUser(user);

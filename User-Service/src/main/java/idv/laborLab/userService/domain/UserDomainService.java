@@ -7,6 +7,8 @@ import idv.laborLab.userService.entity.UserSecurityInfo;
 
 public interface UserDomainService {
 
+    FindUsersResponseDTO findUsers(int page, int size);
+
     long registerUser(UserRegistrationDTO user);
 
     void registerUserPostProcess(UserRegistrationSO userRegistrationSO);
