@@ -10,6 +10,7 @@ import idv.laborLab.redisClient.annotation.LaborLabCacheable;
 import idv.laborLab.userService.dto.*;
 import idv.laborLab.userService.entity.User;
 import idv.laborLab.userService.entity.UserSecurityInfo;
+import idv.laborLab.userService.exception.UserInformationConflictException;
 import idv.laborLab.userService.exception.UserNotFoundException;
 import idv.laborLab.userService.repo.UserRedisRepository;
 import idv.laborLab.userService.repo.UserRepository;
@@ -58,10 +59,9 @@ public class UserDomainServiceImpl implements UserDomainService {
     @Override
     public long registerUser(UserRegistrationDTO userRegistrationDTO) {
 
-        // check redis cache is there any conflict
+        this.checkUserNameAndEmail(userRegistrationDTO);
 
         // write into Redis first
-
         User user = userRegistrationDTO.convertToUserEntity();
         long newId = redisIDService.getNextID();
         user.setId(newId);
@@ -70,11 +70,34 @@ public class UserDomainServiceImpl implements UserDomainService {
 
             String encryptedPassword = cryptoService.encrypt(userRegistrationDTO.getPassword());
 
-            //             convert to shared object and send it to queue for mysql
+            // convert to shared object and send it to queue for mysql
             userRegistrationQueueService.convertAndSend(userRegistrationDTO.buildUserRegistrationSO(newId, encryptedPassword));
         });
 
         return newId;
+    }
+
+    /**
+     * Check userName and email exist or not in Redis cache and Database.
+     *
+     * @throws UserInformationConflictException if userName or email already exist in Redis Cache or Database.
+     * @Author Maxence
+     */
+    private void checkUserNameAndEmail(UserRegistrationDTO userRegistrationDTO) {
+
+        boolean userNameConflictExist = checkUserExistence(UserIndex.USER_NAME, userRegistrationDTO.getUserName());
+
+        if (userNameConflictExist) {
+
+            throw new UserInformationConflictException("field: " + UserIndex.USER_NAME.name() + ", content: " + userRegistrationDTO.getUserName());
+        }
+
+        boolean emailConflictExist = checkUserExistence(UserIndex.EMAIL, userRegistrationDTO.getEmail());
+
+        if (emailConflictExist) {
+
+            throw new UserInformationConflictException("field: " + UserIndex.EMAIL.name() + ", content: " + userRegistrationDTO.getEmail());
+        }
     }
 
     @Override
@@ -115,11 +138,11 @@ public class UserDomainServiceImpl implements UserDomainService {
         switch (userIndex) {
 
             case USER_NAME -> user = userRepository.findUserByUserName(searchString)
-                                                   .orElseThrow(() -> new UserNotFoundException(searchString));
+                                                   .orElseThrow(() -> new UserNotFoundException(UserIndex.USER_NAME.name() + ": " + searchString));
             case EMAIL -> user = userRepository.findUserByEmail(searchString)
-                                               .orElseThrow(() -> new UserNotFoundException(searchString));
+                                               .orElseThrow(() -> new UserNotFoundException(UserIndex.EMAIL.name() + ": " + searchString));
             case USER_ID -> user = userRepository.findById(Long.valueOf(searchString))
-                                                 .orElseThrow(() -> new UserNotFoundException(searchString));
+                                                 .orElseThrow(() -> new UserNotFoundException(UserIndex.USER_ID.name() + ": " + searchString));
         }
         return user;
     }
@@ -133,15 +156,18 @@ public class UserDomainServiceImpl implements UserDomainService {
     @Override
     public boolean checkUserExistence(UserIndex userIndex, String searchString) {
 
-        boolean result = false;
+        boolean existInRedisCache = userRedisRepository.exist(searchString);
+        boolean existInDatabase = false;
 
-        switch (userIndex) {
+        if (!existInRedisCache) {
 
-            case USER_NAME -> result = userRepository.existsUserByUserName(searchString);
-            case EMAIL -> result = userRepository.existsUserByEmail(searchString);
+            switch (userIndex) {
+                case USER_NAME -> existInDatabase = userRepository.existsUserByUserName(searchString);
+                case EMAIL -> existInDatabase = userRepository.existsUserByEmail(searchString);
+            }
         }
 
-        return result;
+        return existInRedisCache || existInDatabase;
     }
 
     @Override
