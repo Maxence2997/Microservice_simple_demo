@@ -34,6 +34,7 @@
         <module>user-service</module>
         <module>record-service</module>
         <module>config-client</module>
+        <module>api-gateway</module>
     </modules>
 
     <dependencies>

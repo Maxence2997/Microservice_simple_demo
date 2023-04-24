@@ -1,0 +1,54 @@
+server:
+  port: 8080
+
+spring:
+  cloud:
+    gateway:
+      discovery:
+        locator:
+          enabled: true
+          lowerCaseServiceId: true
+      routes:
+        # product service route
+        - id: UserService
+#          uri: lb://UserService
+          uri: http://localhost:8081
+          predicates:
+            - Path=/user-service/**
+          filters:
+            - RewritePath=/user-service/(?<segment>.*), /api/user/$\{segment}
+        - id: UserService_Admin
+          uri: http://localhost:8081
+          predicates:
+            - Path=/user-service/admin/**
+          filters:
+            - RewritePath=/user-service/admin/(?<segment>.*), /api/user-admin/$\{segment}
+#        # order service route
+#        - id: order-service
+#          uri: lb://order-service
+#          predicates:
+#            - Path=/api/order
+#        # discover server route
+#        - id: discovery-server
+#          uri: http://localhost:8761
+#          predicates:
+#            - Path=/eureka/web
+#          filters:
+#            - SetPath=/
+        # discovery server static resources route
+#        - id: discovery-server-static
+#          uri: http://localhost:8761
+#          predicates:
+#            - Path=/eureka/**
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: http://localhost:8761/eureka
+
+management:
+  endpoints:
+    gateway:
+      enabled: true
+    web:
+      exposure:
+        include: "*"

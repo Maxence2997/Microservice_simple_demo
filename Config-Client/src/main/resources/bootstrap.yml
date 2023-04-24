@@ -1,6 +1,6 @@
 spring:
   application:
-    name: ConfigClient
+    name: config-client
   config:
     import: optional:configserver:http://localhost:8888
 
